@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 255 255 255; /* Pure white background */
+    --foreground: 0 0 0; /* Pure black text */
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0 0;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0 0;
+
+    --primary: 0 0 0; /* Pure black */
+    --primary-foreground: 255 255 255;
+
+    --secondary: 245 245 245; /* Very light gray */
+    --secondary-foreground: 0 0 0;
+
+    --muted: 245 245 245;
+    --muted-foreground: 115 115 115;
+
+    --accent: 0 0 0; /* Black accent */
+    --accent-foreground: 255 255 255;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 229 229 229; /* Light gray borders */
+    --input: 229 229 229;
+    --ring: 0 0 0;
+
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 0 0 0;
+    --foreground: 255 255 255;
+
+    --card: 0 0 0;
+    --card-foreground: 255 255 255;
+
+    --popover: 0 0 0;
+    --popover-foreground: 255 255 255;
+
+    --primary: 255 255 255;
+    --primary-foreground: 0 0 0;
+
+    --secondary: 38 38 38;
+    --secondary-foreground: 255 255 255;
+
+    --muted: 38 38 38;
+    --muted-foreground: 163 163 163;
+
+    --accent: 255 255 255;
+    --accent-foreground: 0 0 0;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 38 38 38;
+    --input: 38 38 38;
+    --ring: 255 255 255;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-black via-gray-800 to-black bg-clip-text text-transparent font-bold;
+  }
+}
