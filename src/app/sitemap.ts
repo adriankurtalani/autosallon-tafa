@@ -44,7 +44,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Dynamic car pages
   const carPages: MetadataRoute.Sitemap = cars.map((car) => ({
     url: `${SITE_URL}/cars/${car.slug}`,
-    lastModified: car.updated_at ? new Date(car.updated_at) : new Date(),
+    lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: car.featured ? 0.9 : 0.8,
   }));

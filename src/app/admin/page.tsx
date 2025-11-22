@@ -178,6 +178,120 @@ export default function AdminPage() {
     });
   };
 
+  const validateField = (field: keyof Car, value: any): boolean => {
+    let error = "";
+    
+    switch (field) {
+      case "slug":
+        const slugResult = validateSlug(value || "");
+        if (!slugResult.isValid) error = slugResult.error || "";
+        break;
+      case "brand":
+        const brandResult = validateBrand(value || "");
+        if (!brandResult.isValid) error = brandResult.error || "";
+        break;
+      case "model":
+        const modelResult = validateModel(value || "");
+        if (!modelResult.isValid) error = modelResult.error || "";
+        break;
+      case "year":
+        const yearResult = validateYear(value);
+        if (!yearResult.isValid) error = yearResult.error || "";
+        break;
+      case "price":
+        const priceResult = validatePrice(value);
+        if (!priceResult.isValid) error = priceResult.error || "";
+        break;
+      case "mileage":
+        const mileageResult = validateMileage(value);
+        if (!mileageResult.isValid) error = mileageResult.error || "";
+        break;
+      case "powerHp":
+        const powerResult = validatePowerHp(value);
+        if (!powerResult.isValid) error = powerResult.error || "";
+        break;
+    }
+    
+    setFormErrors(prev => ({ ...prev, [field]: error }));
+    return error === "";
+  };
+  
+  const handleFieldBlur = (field: keyof Car) => {
+    setTouchedFields(prev => ({ ...prev, [field]: true }));
+    validateField(field, formData[field]);
+  };
+  
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {};
+    let isValid = true;
+    
+    // Validate all required fields
+    const slugResult = validateSlug(formData.slug || "");
+    if (!slugResult.isValid) {
+      newErrors.slug = slugResult.error || "";
+      isValid = false;
+    }
+    
+    const brandResult = validateBrand(formData.brand || "");
+    if (!brandResult.isValid) {
+      newErrors.brand = brandResult.error || "";
+      isValid = false;
+    }
+    
+    const modelResult = validateModel(formData.model || "");
+    if (!modelResult.isValid) {
+      newErrors.model = modelResult.error || "";
+      isValid = false;
+    }
+    
+    const yearResult = validateYear(formData.year);
+    if (!yearResult.isValid) {
+      newErrors.year = yearResult.error || "";
+      isValid = false;
+    }
+    
+    const priceResult = validatePrice(formData.price);
+    if (!priceResult.isValid) {
+      newErrors.price = priceResult.error || "";
+      isValid = false;
+    }
+    
+    const mileageResult = validateMileage(formData.mileage);
+    if (!mileageResult.isValid) {
+      newErrors.mileage = mileageResult.error || "";
+      isValid = false;
+    }
+    
+    if (formData.powerHp !== undefined) {
+      const powerResult = validatePowerHp(formData.powerHp);
+      if (!powerResult.isValid) {
+        newErrors.powerHp = powerResult.error || "";
+        isValid = false;
+      }
+    }
+    
+    // Check if at least one image is provided
+    if (imageFiles.length === 0 && !formData.mainImage && (!editingCar || !editingCar.mainImage)) {
+      newErrors.mainImage = "Duhet të ngarkoni të paktën një imazh";
+      isValid = false;
+    }
+    
+    setFormErrors(newErrors);
+    // Mark all fields as touched
+    setTouchedFields({
+      slug: true,
+      brand: true,
+      model: true,
+      year: true,
+      price: true,
+      mileage: true,
+      powerHp: true,
+      mainImage: true,
+    });
+    
+    return isValid;
+  };
+
   const handleSave = async () => {
     // Validate form before saving
     if (!validateForm()) {
@@ -230,8 +344,8 @@ export default function AdminPage() {
           
           // Update car with image URLs
           const updatedCar = await updateCar(newCar.id, {
-            mainImage: uploadedUrls[0] || "",
-            gallery: uploadedUrls.slice(1),
+            mainImage: imageUrls[0] || "",
+            gallery: imageUrls.slice(1),
           });
           
           if (updatedCar) {
@@ -353,6 +467,11 @@ export default function AdminPage() {
       
       return updated;
     });
+    
+    // Validate on change if field has been touched
+    if (touchedFields[field]) {
+      validateField(field, value);
+    }
   };
 
   const handleArrayChange = (field: 'gallery' | 'options', value: string) => {
@@ -735,7 +854,7 @@ export default function AdminPage() {
                             : "border-gray-300"
                         }`}
                         placeholder="bmw-x5-2022"
-                        disabled={isCreating && formData.brand && formData.model && formData.year}
+                        disabled={isCreating && !!(formData.brand && formData.model && formData.year)}
                         aria-invalid={touchedFields.slug && !!formErrors.slug}
                         aria-describedby={touchedFields.slug && formErrors.slug ? "slug-error" : "slug-description"}
                       />

@@ -118,12 +118,12 @@ export async function getCarBrands(): Promise<string[]> {
     .select('brand')
     .order('brand', { ascending: true });
 
-  if (error) {
+  if (error || !data) {
     console.error('Error fetching brands:', error);
     return [];
   }
 
-  return Array.from(new Set(data.map(row => row.brand))).sort();
+  return Array.from(new Set(data.map((row: any) => row.brand).filter(Boolean))).sort() as string[];
 }
 
 // Create a new car
@@ -151,6 +151,7 @@ export async function updateCar(id: string, car: Partial<Car>): Promise<Car | nu
   
   const { data, error } = await supabase
     .from('cars')
+    // @ts-ignore - Supabase type inference issue
     .update(dbRow)
     .eq('id', id)
     .select()

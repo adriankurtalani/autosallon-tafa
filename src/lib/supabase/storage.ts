@@ -55,7 +55,6 @@ export async function uploadCarImage(file: File, carId: string, index: number): 
     if (error) {
       console.error('Error uploading image:', error);
       console.error('Error details:', JSON.stringify(error, null, 2));
-      console.error('Error code:', error.statusCode);
       
       // Provide helpful error messages
       if (error.message?.includes('Bucket not found')) {
@@ -64,7 +63,7 @@ export async function uploadCarImage(file: File, carId: string, index: number): 
       if (error.message?.includes('new row violates row-level security')) {
         throw new Error('Storage policy error. Please check your bucket policies in Supabase.');
       }
-      if (error.statusCode === 403) {
+      if (error.message?.includes('403') || error.message?.includes('Forbidden')) {
         throw new Error('Permission denied. Please check your storage policies allow authenticated users to upload.');
       }
       
