@@ -542,31 +542,33 @@ export default function AdminPage() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between flex-wrap gap-4">
+        <div className="mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-black">Admin Panel</h1>
-              <p className="text-gray-600 mt-2">Manage your car inventory</p>
+              <h1 className="text-2xl sm:text-3xl font-bold text-black">Admin Panel</h1>
+              <p className="text-gray-600 mt-1 sm:mt-2 text-sm sm:text-base">Manage your car inventory</p>
             </div>
-            <div className="flex gap-4 flex-wrap">
-              <Link href="/" target="_blank">
-                <Button variant="outline" className="border-black text-black hover:bg-black hover:text-white">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
+              <Link href="/" target="_blank" className="w-full sm:w-auto">
+                <Button variant="outline" className="w-full sm:w-auto border-black text-black hover:bg-black hover:text-white text-sm sm:text-base">
                   <Eye className="h-4 w-4 mr-2" />
-                  View Website
+                  <span className="hidden sm:inline">View Website</span>
+                  <span className="sm:hidden">View Site</span>
                 </Button>
               </Link>
               <Button 
                 variant="outline" 
                 onClick={handleLogout}
-                className="border-black text-black hover:bg-black hover:text-white"
+                className="w-full sm:w-auto border-black text-black hover:bg-black hover:text-white text-sm sm:text-base"
               >
                 <LogOut className="h-4 w-4 mr-2" />
                 Logout
               </Button>
               {!isCreating && !editingCar && (
-                <Button onClick={handleCreate} className="bg-black text-white hover:bg-gray-800">
+                <Button onClick={handleCreate} className="w-full sm:w-auto bg-black text-white hover:bg-gray-800 text-sm sm:text-base">
                   <Plus className="h-4 w-4 mr-2" />
-                  Add New Car
+                  <span className="hidden sm:inline">Add New Car</span>
+                  <span className="sm:hidden">Add Car</span>
                 </Button>
               )}
             </div>
@@ -574,7 +576,7 @@ export default function AdminPage() {
         </div>
 
         {/* Statistics Dashboard */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
@@ -636,9 +638,9 @@ export default function AdminPage() {
         <div>
             <Card>
               <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>Cars ({filteredCars.length})</CardTitle>
-                  <div className="relative w-64">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <CardTitle className="text-lg sm:text-xl">Cars ({filteredCars.length})</CardTitle>
+                  <div className="relative w-full sm:w-64">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <input
                       type="text"
@@ -668,72 +670,77 @@ export default function AdminPage() {
                     {filteredCars.map((car) => (
                       <div
                         key={car.id}
-                        className="relative flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50"
+                        className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 p-3 sm:p-4 border border-gray-200 rounded-lg hover:bg-gray-50"
                       >
-                        <div className="flex items-center gap-4 flex-1">
-                          <Link href={`/cars/${car.slug}`} target="_blank" className="w-20 h-20 relative rounded-lg overflow-hidden bg-gray-100 group">
+                        <div className="flex items-start sm:items-center gap-3 sm:gap-4 flex-1 min-w-0">
+                          <Link href={`/cars/${car.slug}`} target="_blank" className="w-16 h-16 sm:w-20 sm:h-20 relative rounded-lg overflow-hidden bg-gray-100 group flex-shrink-0">
                             {car.mainImage ? (
                               <Image
                                 src={car.mainImage}
                                 alt={car.brand}
                                 fill
                                 className="object-cover group-hover:scale-105 transition-transform"
-                                sizes="80px"
+                                sizes="(max-width: 640px) 64px, 80px"
                               />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center">
-                                <ImageIcon className="h-6 w-6 text-gray-400" />
+                                <ImageIcon className="h-5 w-5 sm:h-6 sm:w-6 text-gray-400" />
                               </div>
                             )}
                           </Link>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <h3 className="font-semibold text-black">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex flex-wrap items-center gap-2 mb-1">
+                              <h3 className="font-semibold text-black text-sm sm:text-base truncate">
                                 {car.brand} {car.model} {car.year}
                               </h3>
                               {car.featured && (
-                                <Badge variant="secondary" className="bg-black text-white">
+                                <Badge variant="secondary" className="bg-black text-white text-xs">
                                   Featured
                                 </Badge>
                               )}
                               {car.isNew && (
-                                <Badge variant="secondary">New</Badge>
+                                <Badge variant="secondary" className="text-xs">New</Badge>
                               )}
                             </div>
-                            <p className="text-sm text-gray-600">
+                            <p className="text-xs sm:text-sm text-gray-600">
                               €{car.price.toLocaleString()} • {car.mileage.toLocaleString()} km • {car.transmission}
                             </p>
-                            <p className="text-xs text-gray-500 mt-1">
+                            <p className="text-xs text-gray-500 mt-1 hidden sm:block truncate">
                               Slug: {car.slug}
                             </p>
                           </div>
                         </div>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 sm:flex-shrink-0">
                           <Button
                             variant="outline"
                             size="sm"
                             onClick={() => handleEdit(car)}
                             disabled={isCreating || editingCar !== null}
+                            className="flex-1 sm:flex-initial"
+                            aria-label={`Edit ${car.brand} ${car.model}`}
                           >
-                            <Edit className="h-4 w-4" />
+                            <Edit className="h-4 w-4 sm:mr-0" />
+                            <span className="ml-2 sm:hidden">Edit</span>
                           </Button>
                           <Button
                             variant="outline"
                             size="sm"
                             onClick={() => handleDelete(car.id)}
                             disabled={isCreating || editingCar !== null || deleteConfirmId === car.id}
-                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50 flex-1 sm:flex-initial"
+                            aria-label={`Delete ${car.brand} ${car.model}`}
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 className="h-4 w-4 sm:mr-0" />
+                            <span className="ml-2 sm:hidden">Delete</span>
                           </Button>
                           {deleteConfirmId === car.id && (
-                            <div className="absolute right-0 top-full mt-2 p-3 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                            <div className="absolute left-0 right-0 sm:right-auto sm:left-auto sm:right-0 top-full mt-2 p-3 bg-white border border-gray-200 rounded-lg shadow-lg z-10 sm:w-auto w-full">
                               <p className="text-sm mb-2">Delete this car?</p>
                               <div className="flex gap-2">
                                 <Button
                                   size="sm"
                                   onClick={confirmDelete}
-                                  className="bg-black text-white hover:bg-gray-800 text-xs"
+                                  className="bg-black text-white hover:bg-gray-800 text-xs flex-1 sm:flex-initial"
                                 >
                                   Yes, Delete
                                 </Button>
@@ -741,7 +748,7 @@ export default function AdminPage() {
                                   size="sm"
                                   variant="outline"
                                   onClick={() => setDeleteConfirmId(null)}
-                                  className="text-xs"
+                                  className="text-xs flex-1 sm:flex-initial"
                                 >
                                   Cancel
                                 </Button>
@@ -763,17 +770,17 @@ export default function AdminPage() {
             handleCancel();
           }
         }}>
-            <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden flex flex-col p-0">
-              <DialogHeader>
-                <DialogTitle>
+            <DialogContent className="max-w-[95vw] sm:max-w-2xl md:max-w-4xl lg:max-w-5xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden flex flex-col p-0">
+              <DialogHeader className="p-4 sm:p-6">
+                <DialogTitle className="text-xl sm:text-2xl">
                   {isCreating ? "Create New Car" : "Edit Car"}
                 </DialogTitle>
-                <DialogDescription>
+                <DialogDescription className="text-xs sm:text-sm">
                   {isCreating ? "Fill in the details below to add a new car to your inventory" : "Update the car information below"}
                 </DialogDescription>
               </DialogHeader>
               
-              <div className="overflow-y-auto flex-1 px-6 pb-6">
+              <div className="overflow-y-auto flex-1 px-4 sm:px-6 pb-4 sm:pb-6">
                 <div className="space-y-6">
                   {/* Basic Information Section */}
                   <div className="space-y-4">
@@ -782,7 +789,7 @@ export default function AdminPage() {
                     </div>
                     
                     {/* Brand & Model */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                       <div>
                         <label className="block text-sm font-semibold mb-2 text-black">
                           Brand *
@@ -876,7 +883,7 @@ export default function AdminPage() {
                     </div>
                     
                     {/* Year, Price, Mileage */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                       <div>
                         <label className="block text-sm font-semibold mb-2 text-black">
                           Year *
@@ -920,7 +927,7 @@ export default function AdminPage() {
                     </div>
 
                     {/* Fuel Type & Transmission */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                       <div>
                         <label className="block text-sm font-semibold mb-2 text-black">
                           Fuel Type *
@@ -952,7 +959,7 @@ export default function AdminPage() {
                     </div>
 
                     {/* Power HP, Color, Body Type */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                       <div>
                         <label className="block text-sm font-semibold mb-2 text-black">
                           Power (HP)
@@ -1011,13 +1018,13 @@ export default function AdminPage() {
                       <h3 className="font-semibold text-black text-lg">Status & Visibility</h3>
                     </div>
                     
-                    <div className="flex gap-6">
+                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
                       <label className="flex items-center gap-3 cursor-pointer group">
                         <input
                           type="checkbox"
                           checked={formData.featured || false}
                           onChange={(e) => handleInputChange("featured", e.target.checked)}
-                          className="w-5 h-5 rounded border-2 border-gray-300 text-black focus:ring-2 focus:ring-black cursor-pointer"
+                          className="w-5 h-5 rounded border-2 border-gray-300 text-black focus:ring-2 focus:ring-black cursor-pointer flex-shrink-0"
                         />
                         <div>
                           <span className="text-sm font-semibold text-black block">Featured</span>
@@ -1029,7 +1036,7 @@ export default function AdminPage() {
                           type="checkbox"
                           checked={formData.isNew || false}
                           onChange={(e) => handleInputChange("isNew", e.target.checked)}
-                          className="w-5 h-5 rounded border-2 border-gray-300 text-black focus:ring-2 focus:ring-black cursor-pointer"
+                          className="w-5 h-5 rounded border-2 border-gray-300 text-black focus:ring-2 focus:ring-black cursor-pointer flex-shrink-0"
                         />
                         <div>
                           <span className="text-sm font-semibold text-black block">New</span>
@@ -1133,38 +1140,40 @@ export default function AdminPage() {
               </div>
               
               {/* Footer with Save Button */}
-              <div className="border-t border-gray-200 bg-gray-50 p-6">
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex-1">
+              <div className="border-t border-gray-200 bg-gray-50 p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+                  <div className="flex-1 order-2 sm:order-1">
                     {(!formData.slug || !formData.brand || !formData.model || (imageFiles.length === 0 && !formData.mainImage && (!editingCar || !editingCar.mainImage))) && (
                       <p className="text-xs text-gray-500">
                         Please fill in all required fields (*) and upload at least one image
                       </p>
                     )}
                   </div>
-                  <div className="flex gap-3">
+                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 order-1 sm:order-2 w-full sm:w-auto">
                     <Button
                       variant="outline"
                       onClick={handleCancel}
                       disabled={saving}
-                      className="border-black text-black hover:bg-black hover:text-white"
+                      className="w-full sm:w-auto border-black text-black hover:bg-black hover:text-white"
                     >
                       Cancel
                     </Button>
                     <Button
                       onClick={handleSave}
                       disabled={saving || uploadingImages || !formData.slug || !formData.brand || !formData.model || (imageFiles.length === 0 && !formData.mainImage && (!editingCar || !editingCar.mainImage))}
-                      className="bg-black text-white hover:bg-gray-800 h-11 px-6 font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full sm:w-auto bg-black text-white hover:bg-gray-800 h-11 px-6 font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {saving || uploadingImages ? (
                         <>
                           <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          {uploadingImages ? "Uploading..." : isCreating ? "Creating..." : "Saving..."}
+                          <span className="hidden sm:inline">{uploadingImages ? "Uploading..." : isCreating ? "Creating..." : "Saving..."}</span>
+                          <span className="sm:hidden">{uploadingImages ? "Uploading..." : "Saving..."}</span>
                         </>
                       ) : (
                         <>
                           <Save className="h-4 w-4 mr-2" />
-                          {isCreating ? "Create Car" : "Save Changes"}
+                          <span className="hidden sm:inline">{isCreating ? "Create Car" : "Save Changes"}</span>
+                          <span className="sm:hidden">{isCreating ? "Create" : "Save"}</span>
                         </>
                       )}
                     </Button>

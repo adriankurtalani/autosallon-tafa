@@ -268,7 +268,7 @@ export default function CarsPage() {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar Filters */}
           <div className={`lg:block ${showFilters ? 'block' : 'hidden'} w-full lg:w-80`}>
-            <Card className="sticky top-24 overflow-hidden">
+            <Card className="lg:sticky lg:top-24 overflow-hidden">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="flex items-center text-black">
                   <Filter className="h-5 w-5 mr-2 text-black" />
@@ -463,34 +463,34 @@ export default function CarsPage() {
           {/* Cars Grid */}
           <div className="flex-1">
             {/* Sort Bar */}
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-6">
               <div className="flex flex-wrap gap-2">
                 {selectedBrands.map((brand) => (
-                  <Badge key={brand} variant="secondary" className="flex items-center gap-1">
+                  <Badge key={brand} variant="secondary" className="flex items-center gap-1 text-xs sm:text-sm">
                     {brand}
                     <X className="h-3 w-3 cursor-pointer" onClick={() => toggleBrand(brand)} />
                   </Badge>
                 ))}
                 {selectedTransmissions.map((transmission) => (
-                  <Badge key={transmission} variant="secondary" className="flex items-center gap-1">
+                  <Badge key={transmission} variant="secondary" className="flex items-center gap-1 text-xs sm:text-sm">
                     {transmission}
                     <X className="h-3 w-3 cursor-pointer" onClick={() => toggleTransmission(transmission)} />
                   </Badge>
                 ))}
                 {selectedFuelTypes.map((fuelType) => (
-                  <Badge key={fuelType} variant="secondary" className="flex items-center gap-1">
+                  <Badge key={fuelType} variant="secondary" className="flex items-center gap-1 text-xs sm:text-sm">
                     {fuelType}
                     <X className="h-3 w-3 cursor-pointer" onClick={() => toggleFuelType(fuelType)} />
                   </Badge>
                 ))}
               </div>
               
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600">Rendit sipas:</span>
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <span className="text-xs sm:text-sm text-gray-600 whitespace-nowrap">Rendit sipas:</span>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as SortOption)}
-                  className="px-3 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-black focus:border-black"
+                  className="flex-1 sm:flex-initial px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-black focus:border-black"
                 >
                   <option value="newest">Më i ri</option>
                   <option value="oldest">Më i vjetër</option>
@@ -504,7 +504,7 @@ export default function CarsPage() {
             
             {/* Cars Grid */}
             {filteredCars.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {filteredCars.map((car) => (
                   <CarCard key={car.id} car={car} />
                 ))}

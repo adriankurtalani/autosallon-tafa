@@ -192,19 +192,19 @@ export default function HomePage() {
               Shërbim profesional, çmime të drejta dhe garanci e sigurt.
             </motion.p>
             <motion.div 
-              className="mt-10 flex items-center justify-center gap-x-6"
+              className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-x-6"
               initial="hidden"
               animate="visible"
               variants={fadeInUp}
               transition={{ ...defaultTransition, delay: 0.3 }}
             >
-              <Button size="lg" asChild className="bg-white hover:bg-gray-100 text-black font-semibold border border-white">
+              <Button size="lg" asChild className="w-full sm:w-auto bg-white hover:bg-gray-100 text-black font-semibold border border-white">
                 <Link href="/cars" prefetch={true}>Shiko Inventarin</Link>
               </Button>
               <Button 
                 variant="outline" 
                 size="lg" 
-                className="border-white text-white hover:bg-white hover:text-black"
+                className="w-full sm:w-auto border-white text-white hover:bg-white hover:text-black"
                 asChild
               >
                 <Link href="/contact" prefetch={true}>Na Kontakto</Link>
@@ -215,20 +215,20 @@ export default function HomePage() {
       </section>
 
       {/* Quick Search Bar */}
-      <section className="bg-white shadow-lg -mt-8 relative z-20 mx-auto max-w-6xl rounded-2xl border border-gray-200">
+      <section className="bg-white shadow-lg -mt-8 relative z-20 mx-auto max-w-6xl rounded-xl sm:rounded-2xl border border-gray-200 mx-4 sm:mx-auto">
         <motion.div 
-          className="p-8"
+          className="p-4 sm:p-6 lg:p-8"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
           variants={fadeInUp}
           transition={defaultTransition}
         >
-          <div className="flex items-center justify-center mb-6">
-            <Search className="h-6 w-6 text-black mr-2" />
-            <h2 className="text-xl font-semibold text-black">Kërkim i Shpejtë</h2>
+          <div className="flex items-center justify-center mb-4 sm:mb-6">
+            <Search className="h-5 w-5 sm:h-6 sm:w-6 text-black mr-2" />
+            <h2 className="text-lg sm:text-xl font-semibold text-black">Kërkim i Shpejtë</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             <select 
               className="rounded-lg border border-gray-300 px-4 py-3 focus:border-black focus:ring-black focus:ring-2 bg-white"
               value={selectedBrand}
@@ -287,7 +287,7 @@ export default function HomePage() {
             </p>
           </motion.div>
           
-          <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+          <div className="mx-auto mt-12 sm:mt-16 grid max-w-2xl grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:mx-0 lg:max-w-none">
             {featuredCars.map((car, index) => (
               <motion.div
                 key={car.id}

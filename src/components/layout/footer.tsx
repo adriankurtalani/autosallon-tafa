@@ -57,7 +57,7 @@ export function Footer() {
           </div>
           
           {/* Navigation Links */}
-          <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
+          <div className="mt-12 sm:mt-16 grid grid-cols-1 sm:grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
             <div>
               <h3 className="text-sm font-semibold leading-6 text-white">Navigimi</h3>
               <ul role="list" className="mt-6 space-y-4">
@@ -103,8 +103,8 @@ export function Footer() {
         </div>
         
         {/* Social Media & Actions */}
-        <div className="mt-12 flex flex-col space-y-6 border-t border-gray-600 pt-8 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
-          <div className="flex space-x-4">
+        <div className="mt-8 sm:mt-12 flex flex-col space-y-4 sm:space-y-6 border-t border-gray-600 pt-6 sm:pt-8 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+          <div className="flex flex-wrap gap-3 sm:space-x-4">
             <Button variant="outline" size="sm" className="border-gray-600 text-gray-300 hover:text-white hover:border-white">
               <Facebook className="h-4 w-4" />
             </Button>

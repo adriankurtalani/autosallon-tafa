@@ -4,8 +4,18 @@ import { getAllCars } from '@/lib/supabase/cars';
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://autosallontafa.al';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Get all cars
-  const cars = await getAllCars();
+  // Get all cars - handle gracefully if Supabase is not configured
+  let cars: any[] = [];
+  try {
+    // Check if Supabase environment variables are set
+    if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      cars = await getAllCars();
+    }
+  } catch (error) {
+    // If Supabase is not configured or fails, continue with empty cars array
+    console.warn('Could not fetch cars for sitemap:', error);
+    cars = [];
+  }
   
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [

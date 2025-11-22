@@ -50,6 +50,12 @@ function carToDbRow(car: Partial<Car>): any {
 
 // Fetch all cars
 export async function getAllCars(): Promise<Car[]> {
+  // Check if Supabase is properly configured
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    console.warn('Supabase not configured, returning empty cars array');
+    return [];
+  }
+
   const { data, error } = await supabase
     .from('cars')
     .select('*')
@@ -57,6 +63,10 @@ export async function getAllCars(): Promise<Car[]> {
 
   if (error) {
     console.error('Error fetching cars:', error);
+    return [];
+  }
+
+  if (!data) {
     return [];
   }
 

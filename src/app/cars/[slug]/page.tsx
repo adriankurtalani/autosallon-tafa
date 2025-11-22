@@ -127,7 +127,7 @@ export default function CarDetailPage() {
           </Link>
         </Button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
           {/* Image Gallery */}
           <div className="relative">
             <ImageGallery 
@@ -169,7 +169,7 @@ export default function CarDetailPage() {
             </div>
 
             {/* Quick Stats */}
-            <div className="grid grid-cols-2 gap-4 p-4 bg-gray-100 rounded-xl">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 p-3 sm:p-4 bg-gray-100 rounded-xl">
               <div className="flex items-center gap-2">
                 <Gauge className="h-5 w-5 text-black" />
                 <div>
