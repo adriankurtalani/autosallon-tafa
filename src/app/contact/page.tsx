@@ -4,6 +4,7 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatPhoneLink, formatWhatsAppLink } from "@/lib/utils";
+import { validateName, validateEmail, validatePhone, validateMessage } from "@/lib/validation";
 import { 
   Phone, 
   Mail, 
@@ -26,12 +27,107 @@ export default function ContactPage() {
     message: ""
   });
   
+  const [errors, setErrors] = React.useState<Record<string, string>>({});
+  const [touched, setTouched] = React.useState<Record<string, boolean>>({});
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [submitStatus, setSubmitStatus] = React.useState<"idle" | "success" | "error">("idle");
   
+  
+  const validateField = (name: string, value: string) => {
+    let error = "";
+    
+    switch (name) {
+      case "name":
+        const nameResult = validateName(value);
+        if (!nameResult.isValid) error = nameResult.error || "";
+        break;
+      case "email":
+        const emailResult = validateEmail(value);
+        if (!emailResult.isValid) error = emailResult.error || "";
+        break;
+      case "phone":
+        const phoneResult = validatePhone(value);
+        if (!phoneResult.isValid) error = phoneResult.error || "";
+        break;
+      case "message":
+        const messageResult = validateMessage(value);
+        if (!messageResult.isValid) error = messageResult.error || "";
+        break;
+    }
+    
+    setErrors(prev => ({ ...prev, [name]: error }));
+    return error === "";
+  };
+  
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setTouched(prev => ({ ...prev, [name]: true }));
+    validateField(name, value);
+  };
+  
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    
+    // Validate on change if field has been touched
+    if (touched[name]) {
+      validateField(name, value);
+    }
+  };
+  
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {};
+    let isValid = true;
+    
+    // Validate all fields
+    const nameResult = validateName(formData.name);
+    if (!nameResult.isValid) {
+      newErrors.name = nameResult.error || "";
+      isValid = false;
+    }
+    
+    const emailResult = validateEmail(formData.email);
+    if (!emailResult.isValid) {
+      newErrors.email = emailResult.error || "";
+      isValid = false;
+    }
+    
+    if (formData.phone) {
+      const phoneResult = validatePhone(formData.phone);
+      if (!phoneResult.isValid) {
+        newErrors.phone = phoneResult.error || "";
+        isValid = false;
+      }
+    }
+    
+    const messageResult = validateMessage(formData.message);
+    if (!messageResult.isValid) {
+      newErrors.message = messageResult.error || "";
+      isValid = false;
+    }
+    
+    setErrors(newErrors);
+    setTouched({
+      name: true,
+      email: true,
+      phone: true,
+      message: true,
+    });
+    
+    return isValid;
+  };
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate form before submission
+    if (!validateForm()) {
+      setSubmitStatus("error");
+      return;
+    }
+    
     setIsSubmitting(true);
+    setSubmitStatus("idle");
     
     // Simulate form submission
     try {
@@ -52,16 +148,13 @@ Mesazhi: ${formData.message}
       
       setSubmitStatus("success");
       setFormData({ name: "", email: "", phone: "", interestedCar: "", message: "" });
+      setErrors({});
+      setTouched({});
     } catch (error) {
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
     }
-  };
-  
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
   };
   
   const contactMethods = [
@@ -71,7 +164,7 @@ Mesazhi: ${formData.message}
       value: "+355 69 123 4567",
       description: "Na thirrni çdo ditë nga ora 09:00 - 18:00",
       action: () => window.open(formatPhoneLink("+355 69 123 4567"), '_self'),
-      color: "bg-blue-50 border-blue-200"
+      color: "bg-gray-50 border-gray-200"
     },
     {
       icon: MessageCircle,
@@ -79,7 +172,7 @@ Mesazhi: ${formData.message}
       value: "+355 69 123 4567",
       description: "Mesazh i shpejtë 24/7",
       action: () => window.open(formatWhatsAppLink("+355691234567", "Përshëndetje, dëshiroj të kontaktoj AutoSallon Tafa"), '_blank'),
-      color: "bg-green-50 border-green-200"
+      color: "bg-gray-50 border-gray-200"
     },
     {
       icon: Mail,
@@ -87,7 +180,7 @@ Mesazhi: ${formData.message}
       value: "info@autosallontafa.al",
       description: "Përgjigjemi brenda 24 orësh",
       action: () => window.open("mailto:info@autosallontafa.al", '_self'),
-      color: "bg-purple-50 border-purple-200"
+      color: "bg-gray-50 border-gray-200"
     },
     {
       icon: MapPin,
@@ -95,7 +188,7 @@ Mesazhi: ${formData.message}
       value: "Rruga Durrësit, Tiranë",
       description: "Pranë Qendrës Tregtare Tirana East Gate",
       action: () => window.open("https://maps.google.com/?q=Rruga+Durrësit,Tiranë", '_blank'),
-      color: "bg-orange-50 border-orange-200"
+      color: "bg-gray-50 border-gray-200"
     }
   ];
   
@@ -133,7 +226,7 @@ Mesazhi: ${formData.message}
               </CardHeader>
               
               <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6" aria-label="Formulari i kontaktit">
                   {/* Name */}
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
@@ -146,9 +239,23 @@ Mesazhi: ${formData.message}
                       required
                       value={formData.name}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
+                      onBlur={handleBlur}
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-black focus:border-black focus:outline-none ${
+                        touched.name && errors.name
+                          ? "border-gray-400 bg-gray-50"
+                          : "border-gray-300"
+                      }`}
                       placeholder="Shkruani emrin tuaj të plotë"
+                      aria-required="true"
+                      aria-invalid={touched.name && !!errors.name}
+                      aria-describedby={touched.name && errors.name ? "name-error" : "name-description"}
                     />
+                    {touched.name && errors.name && (
+                      <p id="name-error" className="mt-1 text-sm text-gray-600" role="alert">
+                        {errors.name}
+                      </p>
+                    )}
+                    <span id="name-description" className="sr-only">Shkruani emrin tuaj të plotë</span>
                   </div>
                   
                   {/* Email */}
@@ -163,9 +270,23 @@ Mesazhi: ${formData.message}
                       required
                       value={formData.email}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
+                      onBlur={handleBlur}
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-black focus:border-black focus:outline-none ${
+                        touched.email && errors.email
+                          ? "border-gray-400 bg-gray-50"
+                          : "border-gray-300"
+                      }`}
                       placeholder="emri@email.com"
+                      aria-required="true"
+                      aria-invalid={touched.email && !!errors.email}
+                      aria-describedby={touched.email && errors.email ? "email-error" : "email-description"}
                     />
+                    {touched.email && errors.email && (
+                      <p id="email-error" className="mt-1 text-sm text-gray-600" role="alert">
+                        {errors.email}
+                      </p>
+                    )}
+                    <span id="email-description" className="sr-only">Shkruani adresën tuaj të emailit</span>
                   </div>
                   
                   {/* Phone */}
@@ -179,9 +300,22 @@ Mesazhi: ${formData.message}
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
+                      onBlur={handleBlur}
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-black focus:border-black focus:outline-none ${
+                        touched.phone && errors.phone
+                          ? "border-gray-400 bg-gray-50"
+                          : "border-gray-300"
+                      }`}
                       placeholder="+355 69 123 456"
+                      aria-invalid={touched.phone && !!errors.phone}
+                      aria-describedby={touched.phone && errors.phone ? "phone-error" : "phone-description"}
                     />
+                    {touched.phone && errors.phone && (
+                      <p id="phone-error" className="mt-1 text-sm text-gray-600" role="alert">
+                        {errors.phone}
+                      </p>
+                    )}
+                    <span id="phone-description" className="sr-only">Shkruani numrin tuaj të telefonit (opsionale)</span>
                   </div>
                   
                   {/* Interested Car */}
@@ -219,24 +353,48 @@ Mesazhi: ${formData.message}
                       rows={5}
                       value={formData.message}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
+                      onBlur={handleBlur}
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-black focus:border-black focus:outline-none resize-none ${
+                        touched.message && errors.message
+                          ? "border-gray-400 bg-gray-50"
+                          : "border-gray-300"
+                      }`}
                       placeholder="Shkruani mesazhin tuaj këtu..."
+                      aria-required="true"
+                      aria-invalid={touched.message && !!errors.message}
+                      aria-describedby={touched.message && errors.message ? "message-error" : "message-description"}
                     />
+                    {touched.message && errors.message && (
+                      <p id="message-error" className="mt-1 text-sm text-gray-600" role="alert">
+                        {errors.message}
+                      </p>
+                    )}
+                    <span id="message-description" className="sr-only">Shkruani mesazhin tuaj</span>
                   </div>
                   
                   {/* Submit Status */}
                   {submitStatus === "success" && (
-                    <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                      <p className="text-green-700 text-sm">
+                    <div 
+                      className="p-4 bg-gray-100 border border-gray-300 rounded-lg"
+                      role="alert"
+                      aria-live="polite"
+                    >
+                      <p className="text-black text-sm font-medium">
                         Mesazhi u dërgua me sukses! Do t'ju kontaktojmë së shpejti.
                       </p>
                     </div>
                   )}
                   
                   {submitStatus === "error" && (
-                    <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-                      <p className="text-red-700 text-sm">
-                        Ndodhi një gabim gjatë dërgimit. Ju lutemi provoni përsëri ose na kontaktoni drejtpërdrejt.
+                    <div 
+                      className="p-4 bg-gray-100 border border-gray-400 rounded-lg"
+                      role="alert"
+                      aria-live="assertive"
+                    >
+                      <p className="text-black text-sm font-medium">
+                        {Object.keys(errors).length > 0
+                          ? "Ju lutemi plotësoni të gjitha fushat në mënyrë korrekte."
+                          : "Ndodhi një gabim gjatë dërgimit. Ju lutemi provoni përsëri ose na kontaktoni drejtpërdrejt."}
                       </p>
                     </div>
                   )}
@@ -245,14 +403,18 @@ Mesazhi: ${formData.message}
                   <Button 
                     type="submit" 
                     size="lg" 
-                    className="w-full"
+                    className="w-full focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
                     disabled={isSubmitting}
+                    aria-label={isSubmitting ? "Duke dërguar mesazhin" : "Dërgo mesazhin"}
                   >
                     {isSubmitting ? (
-                      <>Duke dërguar...</>
+                      <>
+                        <span aria-hidden="true">Duke dërguar...</span>
+                        <span className="sr-only">Duke dërguar mesazhin</span>
+                      </>
                     ) : (
                       <>
-                        <Send className="h-4 w-4 mr-2" />
+                        <Send className="h-4 w-4 mr-2" aria-hidden="true" />
                         Dërgoje Mesazhin
                       </>
                     )}
@@ -270,8 +432,17 @@ Mesazhi: ${formData.message}
                 {contactMethods.map((method) => (
                   <Card 
                     key={method.title} 
-                    className={`cursor-pointer transition-all hover:shadow-md ${method.color}`}
+                    className={`cursor-pointer transition-all hover:shadow-md focus-within:ring-2 focus-within:ring-black focus-within:ring-offset-2 ${method.color}`}
                     onClick={method.action}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        method.action();
+                      }
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Kontakto me ${method.title}: ${method.value}`}
                   >
                     <CardContent className="p-6">
                       <div className="flex items-start gap-4">
@@ -316,7 +487,7 @@ Mesazhi: ${formData.message}
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-700">E Diel</span>
-                    <span className="text-red-600">E mbyllur</span>
+                    <span className="text-gray-500">E mbyllur</span>
                   </div>
                 </div>
                 

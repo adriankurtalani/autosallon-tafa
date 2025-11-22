@@ -29,8 +29,8 @@
     --destructive-foreground: 0 0% 98%;
 
     --border: 229 229 229; /* Light gray borders */
-    --input: 229 229 229;
-    --ring: 0 0 0;
+    --input: 229 229 229; /* Light gray input borders */
+    --ring: 0 0 0; /* Black ring */
 
     --radius: 0.75rem;
   }
@@ -70,9 +70,147 @@
   * {
     @apply border-border;
   }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
   body {
-    @apply bg-background text-foreground;
+    @apply bg-white text-black;
     font-feature-settings: "rlig" 1, "calt" 1;
+    background-color: white !important;
+  }
+  
+  /* Ensure main container is white */
+  #__next,
+  [data-nextjs-scroll-focus-boundary] {
+    background-color: white !important;
+  }
+  
+  /* Remove any browser default colors and ensure black/white/gray only */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+    -webkit-text-fill-color: black !important;
+  }
+  
+  /* Ensure all form elements use black/white/gray */
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline-color: black;
+    border-color: black;
+  }
+  
+  /* Remove any default link colors */
+  a {
+    color: inherit;
+  }
+  
+  /* Force all buttons to use black/white/gray only */
+  button {
+    color: inherit;
+  }
+  
+  /* Override any browser default yellow highlights */
+  ::selection {
+    background-color: black;
+    color: white;
+  }
+  
+  ::-moz-selection {
+    background-color: black;
+    color: white;
+  }
+  
+  /* Remove any default yellow from form elements */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="number"],
+  select,
+  textarea {
+    background-color: white;
+    color: black;
+  }
+  
+  /* Enhanced focus indicators for accessibility */
+  *:focus {
+    outline-color: black !important;
+  }
+  
+  /* Visible focus indicators for keyboard navigation */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid black;
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  
+  /* Skip to content link - hidden by default, visible on focus */
+  .skip-to-content {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: black;
+    color: white;
+    padding: 8px 16px;
+    text-decoration: none;
+    z-index: 100;
+    border-radius: 0 0 4px 0;
+  }
+  
+  .skip-to-content:focus {
+    top: 0;
+  }
+  
+  /* Override any potential yellow from browser autofill */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active,
+  select:-webkit-autofill,
+  select:-webkit-autofill:hover,
+  select:-webkit-autofill:focus,
+  select:-webkit-autofill:active,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus,
+  textarea:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+    -webkit-text-fill-color: black !important;
+    box-shadow: 0 0 0 30px white inset !important;
+    background-color: white !important;
+    color: black !important;
+  }
+  
+  /* Prevent any yellow colors from appearing - force gray/black borders */
+  .border,
+  [class*="border"]:not([class*="border-white"]):not([class*="border-black"]) {
+    border-color: rgb(229 231 235) !important; /* gray-200 */
+  }
+  
+  /* Ensure buttons don't have yellow backgrounds */
+  button:not([class*="bg-black"]):not([class*="bg-white"]):not([class*="bg-gray"]):not([class*="hover:bg-"]) {
+    background-color: transparent !important;
+  }
+  
+  /* Performance optimizations */
+  img {
+    content-visibility: auto;
+  }
+  
+  /* Optimize font rendering */
+  body {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 

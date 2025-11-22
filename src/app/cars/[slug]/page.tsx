@@ -8,8 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CarCard } from "@/components/ui/car-card";
-import { getCarBySlug, carsData } from "@/lib/data/cars";
+import { Car } from "@/types/car";
+import { ImageGallery } from "@/components/ui/image-gallery";
+import { getCarBySlug, getAllCars } from "@/lib/supabase/cars";
 import { formatPrice, formatMileage, formatPhoneLink, formatWhatsAppLink } from "@/lib/utils";
+import { StructuredData } from "@/components/seo/structured-data";
 import {
   Phone,
   MessageCircle,
@@ -28,22 +31,50 @@ import {
 export default function CarDetailPage() {
   const params = useParams();
   const slug = params.slug as string;
-  const car = getCarBySlug(slug);
-  const [selectedImageIndex, setSelectedImageIndex] = React.useState(0);
+  const [car, setCar] = React.useState<Car | null>(null);
+  const [relatedCars, setRelatedCars] = React.useState<Car[]>([]);
+  const [loading, setLoading] = React.useState(true);
   
-  // Get related cars (same brand, different model, or same price range)
-  const relatedCars = React.useMemo(() => {
-    if (!car) return [];
+  React.useEffect(() => {
+    const loadCar = async () => {
+      setLoading(true);
+      try {
+        const carData = await getCarBySlug(slug);
+        setCar(carData);
+        
+        if (carData) {
+          // Get related cars
+          const allCars = await getAllCars();
+          const related = allCars
+            .filter(c => c.id !== carData.id)
+            .filter(c => 
+              c.brand === carData.brand || 
+              Math.abs(c.price - carData.price) < 10000
+            )
+            .slice(0, 3);
+          setRelatedCars(related);
+        }
+      } catch (error) {
+        console.error("Error loading car:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
     
-    return carsData
-      .filter(c => c.id !== car.id)
-      .filter(c => 
-        c.brand === car.brand || 
-        Math.abs(c.price - car.price) < 10000
-      )
-      .slice(0, 3);
-  }, [car]);
+    loadCar();
+  }, [slug]);
   
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto mb-4"></div>
+          <p className="text-gray-600">Duke ngarkuar veturën...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!car) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -60,9 +91,21 @@ export default function CarDetailPage() {
   
   const whatsappMessage = `Përshëndetje! Jam i interesuar për ${car.brand} ${car.model} ${car.year} (${formatPrice(car.price)}). A mund të më jepni më shumë informacion?`;
 
+  const breadcrumbs = [
+    { name: "Ballina", url: "/" },
+    { name: "Veturat", url: "/cars" },
+    { name: `${car.brand} ${car.model}`, url: `/cars/${car.slug}` },
+  ];
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autosallontafa.al';
+  const pageTitle = `${car.brand} ${car.model} ${car.year} - ${formatPrice(car.price)} | AutoSallon Tafa`;
+  const pageDescription = `${car.brand} ${car.model} ${car.year} për ${formatPrice(car.price)}. ${car.mileage.toLocaleString()} km, ${car.transmission}, ${car.fuelType}${car.powerHp ? `, ${car.powerHp} HP` : ''}. ${car.description || 'Veturë e kontrolluar teknikisht me garanci.'}`;
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Breadcrumb */}
+    <>
+      <StructuredData car={car} breadcrumbs={breadcrumbs} includeOrganization />
+      <div className="min-h-screen bg-gray-50">
+        {/* Breadcrumb */}
       <div className="bg-white border-b">
         <div className="mx-auto max-w-7xl px-6 py-4 lg:px-8">
           <nav className="flex items-center gap-2 text-sm">
@@ -86,52 +129,24 @@ export default function CarDetailPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Image Gallery */}
-          <div className="space-y-4">
-            {/* Main Image */}
-            <div className="aspect-[4/3] relative overflow-hidden rounded-2xl bg-gray-100">
-              <Image
-                src={car.gallery[selectedImageIndex] || car.mainImage}
-                alt={`${car.brand} ${car.model}`}
-                fill
-                className="object-cover"
-                priority
-              />
-              
-              {/* Badges on main image */}
-              <div className="absolute top-4 left-4 flex flex-col gap-2">
-                {car.isNew && (
-                  <Badge className="bg-black text-white">
-                    E Re
-                  </Badge>
-                )}
-                {car.featured && (
-                  <Badge className="bg-white text-black border border-black">
-                    E Veçantë
-                  </Badge>
-                )}
-              </div>
-            </div>
+          <div className="relative">
+            <ImageGallery 
+              images={car.gallery.length > 0 ? car.gallery : [car.mainImage]} 
+              alt={`${car.brand} ${car.model}`}
+            />
             
-            {/* Image Thumbnails */}
-            <div className="grid grid-cols-4 gap-2">
-              {car.gallery.map((image, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSelectedImageIndex(index)}
-                  className={`aspect-square relative overflow-hidden rounded-lg ${
-                    selectedImageIndex === index 
-                      ? 'ring-2 ring-accent' 
-                      : 'hover:opacity-80'
-                  }`}
-                >
-                  <Image
-                    src={image}
-                    alt={`${car.brand} ${car.model} ${index + 1}`}
-                    fill
-                    className="object-cover"
-                  />
-                </button>
-              ))}
+            {/* Badges */}
+            <div className="absolute top-4 left-4 z-10 flex flex-col gap-2">
+              {car.isNew && (
+                <Badge className="bg-black text-white">
+                  E Re
+                </Badge>
+              )}
+              {car.featured && (
+                <Badge className="bg-white text-black border border-black">
+                  E Veçantë
+                </Badge>
+              )}
             </div>
           </div>
 
@@ -336,7 +351,7 @@ export default function CarDetailPage() {
                 <div className="space-y-2">
                   {car.options.map((option, index) => (
                     <div key={index} className="flex items-center gap-2">
-                      <Check className="h-4 w-4 text-green-600 flex-shrink-0" />
+                      <Check className="h-4 w-4 text-black flex-shrink-0" />
                       <span className="text-sm">{option}</span>
                     </div>
                   ))}
@@ -371,5 +386,6 @@ export default function CarDetailPage() {
         )}
       </div>
     </div>
+    </>
   );
 }

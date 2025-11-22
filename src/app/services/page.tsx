@@ -202,7 +202,7 @@ export default function ServicesPage() {
                   <ul className="space-y-2">
                     {service.features.map((feature, index) => (
                       <li key={index} className="flex items-center gap-2 text-sm">
-                        <CheckCircle className="h-4 w-4 text-green-600 flex-shrink-0" />
+                        <CheckCircle className="h-4 w-4 text-black flex-shrink-0" />
                         <span>{feature}</span>
                       </li>
                     ))}
@@ -317,15 +317,15 @@ export default function ServicesPage() {
               
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto text-sm">
                 <div className="bg-white rounded-lg p-4">
-                  <CheckCircle className="h-6 w-6 text-green-600 mx-auto mb-2" />
+                  <CheckCircle className="h-6 w-6 text-black mx-auto mb-2" />
                   <p className="font-semibold">Konsultim Falas</p>
                 </div>
                 <div className="bg-white rounded-lg p-4">
-                  <CheckCircle className="h-6 w-6 text-green-600 mx-auto mb-2" />
+                  <CheckCircle className="h-6 w-6 text-black mx-auto mb-2" />
                   <p className="font-semibold">Ofertë e Detajuar</p>
                 </div>
                 <div className="bg-white rounded-lg p-4">
-                  <CheckCircle className="h-6 w-6 text-green-600 mx-auto mb-2" />
+                  <CheckCircle className="h-6 w-6 text-black mx-auto mb-2" />
                   <p className="font-semibold">Asnjë Kosto e Fshehur</p>
                 </div>
               </div>

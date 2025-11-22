@@ -14,12 +14,15 @@ A professional, modern car dealership website built with Next.js, featuring a sl
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 14 with React 18
+- **Framework**: Next.js 14 with React 18 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
 - **UI Components**: shadcn/ui
 - **Icons**: Lucide React
-- **Animations**: Framer Motion ready
+- **Animations**: Framer Motion
+- **Database**: Supabase (PostgreSQL)
+- **Storage**: Supabase Storage
+- **Authentication**: Supabase Auth
 - **Maps**: Google Maps integration
 
 ## 🚀 Getting Started
@@ -35,12 +38,21 @@ A professional, modern car dealership website built with Next.js, featuring a sl
    npm install
    ```
 
-3. **Run the development server**
+3. **Set up Supabase**
+   - Create a Supabase project at [supabase.com](https://supabase.com)
+   - Follow the setup guide in `SUPABASE_SETUP.md`
+   - Create `.env.local` with your Supabase credentials:
+     ```env
+     NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+     NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+     ```
+
+4. **Run the development server**
    ```bash
    npm run dev
    ```
 
-4. **Open your browser**
+5. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
 ## 📁 Project Structure
@@ -126,19 +138,19 @@ npm run export
 
 ### Adding New Cars
 
-Edit `src/lib/data/cars.ts` to add new cars to the inventory:
+Cars are managed through the **Admin Panel**:
 
-```typescript
-{
-  id: "unique-id",
-  slug: "car-brand-model-year",
-  brand: "Brand Name",
-  model: "Model Name", 
-  year: 2023,
-  price: 50000,
-  // ... other properties
-}
-```
+1. **Set up Supabase** (see `SUPABASE_SETUP.md`)
+2. **Log in** at `/login`
+3. **Access Admin Panel** at `/admin`
+4. **Add cars** with image uploads directly from your computer
+
+The admin panel supports:
+- Creating, editing, and deleting cars
+- Uploading up to 10 images per car
+- Managing featured cars
+- Search and filter cars
+- Dashboard statistics
 
 ## 📈 SEO Features
 

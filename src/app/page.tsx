@@ -3,11 +3,14 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CarCard } from "@/components/ui/car-card";
-import { getFeaturedCars } from "@/lib/data/cars";
+import { getFeaturedCars, getCarBrands } from "@/lib/supabase/cars";
 import { formatWhatsAppLink } from "@/lib/utils";
+import { fadeInUp, defaultTransition } from "@/lib/motion-config";
 import { 
   Search, 
   Shield, 
@@ -22,7 +25,54 @@ import {
 } from "lucide-react";
 
 export default function HomePage() {
-  const featuredCars = getFeaturedCars();
+  const router = useRouter();
+  const [featuredCars, setFeaturedCars] = React.useState<any[]>([]);
+  const [brands, setBrands] = React.useState<string[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  
+  // Quick search state
+  const [selectedBrand, setSelectedBrand] = React.useState<string>("");
+  const [selectedYearRange, setSelectedYearRange] = React.useState<string>("");
+  const [selectedTransmission, setSelectedTransmission] = React.useState<string>("");
+  
+  // Load featured cars and brands
+  React.useEffect(() => {
+    const loadData = async () => {
+      try {
+        const [featured, brandsData] = await Promise.all([
+          getFeaturedCars(),
+          getCarBrands()
+        ]);
+        setFeaturedCars(featured);
+        setBrands(brandsData);
+      } catch (error) {
+        console.error("Error loading data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
+  
+  const handleQuickSearch = () => {
+    const params = new URLSearchParams();
+    
+    if (selectedBrand && selectedBrand !== "Të gjitha markat") {
+      params.append("brand", selectedBrand);
+    }
+    
+    if (selectedYearRange && selectedYearRange !== "Viti") {
+      params.append("yearRange", selectedYearRange);
+    }
+    
+    if (selectedTransmission && selectedTransmission !== "Transmisioni") {
+      params.append("transmission", selectedTransmission);
+    }
+    
+    // Navigate to cars page with filters
+    const queryString = params.toString();
+    router.push(`/cars${queryString ? `?${queryString}` : ""}`);
+  };
   
   const features = [
     {
@@ -83,6 +133,17 @@ export default function HomePage() {
     }
   ];
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto mb-4"></div>
+          <p className="text-gray-600">Duke ngarkuar...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -95,24 +156,50 @@ export default function HomePage() {
             fill
             className="object-cover"
             priority
+            sizes="100vw"
+            quality={85}
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/50" />
         </div>
         
         {/* Hero Content */}
         <div className="relative z-10 mx-auto max-w-7xl px-6 py-32 text-center lg:px-8">
-          <div className="mx-auto max-w-4xl">
-            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl">
+          <motion.div 
+            className="mx-auto max-w-4xl"
+            initial="hidden"
+            animate="visible"
+            variants={fadeInUp}
+            transition={defaultTransition}
+          >
+            <motion.h1 
+              className="text-4xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl"
+              initial="hidden"
+              animate="visible"
+              variants={fadeInUp}
+              transition={{ ...defaultTransition, delay: 0.1 }}
+            >
               Gjej Veturën 
               <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent"> Tënde Ideale</span>
-            </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-200 max-w-2xl mx-auto">
+            </motion.h1>
+            <motion.p 
+              className="mt-6 text-lg leading-8 text-gray-200 max-w-2xl mx-auto"
+              initial="hidden"
+              animate="visible"
+              variants={fadeInUp}
+              transition={{ ...defaultTransition, delay: 0.2 }}
+            >
               AutoSallon Tafa - Vetura të zgjedhura me kujdes për çdo nevojë. 
               Shërbim profesional, çmime të drejta dhe garanci e sigurt.
-            </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
+            </motion.p>
+            <motion.div 
+              className="mt-10 flex items-center justify-center gap-x-6"
+              initial="hidden"
+              animate="visible"
+              variants={fadeInUp}
+              transition={{ ...defaultTransition, delay: 0.3 }}
+            >
               <Button size="lg" asChild className="bg-white hover:bg-gray-100 text-black font-semibold border border-white">
-                <Link href="/cars">Shiko Inventarin</Link>
+                <Link href="/cars" prefetch={true}>Shiko Inventarin</Link>
               </Button>
               <Button 
                 variant="outline" 
@@ -120,67 +207,104 @@ export default function HomePage() {
                 className="border-white text-white hover:bg-white hover:text-black"
                 asChild
               >
-                <Link href="/contact">Na Kontakto</Link>
+                <Link href="/contact" prefetch={true}>Na Kontakto</Link>
               </Button>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
       {/* Quick Search Bar */}
       <section className="bg-white shadow-lg -mt-8 relative z-20 mx-auto max-w-6xl rounded-2xl border border-gray-200">
-        <div className="p-8">
+        <motion.div 
+          className="p-8"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={fadeInUp}
+          transition={defaultTransition}
+        >
           <div className="flex items-center justify-center mb-6">
             <Search className="h-6 w-6 text-black mr-2" />
             <h2 className="text-xl font-semibold text-black">Kërkim i Shpejtë</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <select className="rounded-lg border border-gray-300 px-4 py-3 focus:border-accent focus:ring-accent">
-              <option>Të gjitha markat</option>
-              <option>BMW</option>
-              <option>Audi</option>
-              <option>Mercedes</option>
-              <option>Volkswagen</option>
+            <select 
+              className="rounded-lg border border-gray-300 px-4 py-3 focus:border-black focus:ring-black focus:ring-2 bg-white"
+              value={selectedBrand}
+              onChange={(e) => setSelectedBrand(e.target.value)}
+            >
+              <option value="">Të gjitha markat</option>
+              {brands.map((brand) => (
+                <option key={brand} value={brand}>{brand}</option>
+              ))}
             </select>
-            <select className="rounded-lg border border-gray-300 px-4 py-3 focus:border-accent focus:ring-accent">
-              <option>Viti</option>
-              <option>2020+</option>
-              <option>2015-2019</option>
-              <option>2010-2014</option>
+            <select 
+              className="rounded-lg border border-gray-300 px-4 py-3 focus:border-black focus:ring-black focus:ring-2 bg-white"
+              value={selectedYearRange}
+              onChange={(e) => setSelectedYearRange(e.target.value)}
+            >
+              <option value="">Viti</option>
+              <option value="2020-2025">2020+</option>
+              <option value="2015-2019">2015-2019</option>
+              <option value="2010-2014">2010-2014</option>
             </select>
-            <select className="rounded-lg border border-gray-300 px-4 py-3 focus:border-accent focus:ring-accent">
-              <option>Transmisioni</option>
-              <option>Automatik</option>
-              <option>Manual</option>
+            <select 
+              className="rounded-lg border border-gray-300 px-4 py-3 focus:border-black focus:ring-black focus:ring-2 bg-white"
+              value={selectedTransmission}
+              onChange={(e) => setSelectedTransmission(e.target.value)}
+            >
+              <option value="">Transmisioni</option>
+              <option value="Automatik">Automatik</option>
+              <option value="Manual">Manual</option>
             </select>
-            <Button className="bg-black hover:bg-gray-800 text-white font-semibold">
+            <Button 
+              className="bg-black hover:bg-gray-800 text-white font-semibold"
+              onClick={handleQuickSearch}
+            >
               Kërko
             </Button>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Featured Cars */}
       <section className="py-24 bg-gray-50">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
+          <motion.div 
+            className="mx-auto max-w-2xl text-center"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeInUp}
+            transition={defaultTransition}
+          >
             <h2 className="text-3xl font-bold tracking-tight text-black sm:text-4xl">
               Veturat e Zgjedhura
             </h2>
             <p className="mt-4 text-lg leading-8 text-gray-600">
               Zbulo veturat më të mira nga inventari ynë i zgjerë
             </p>
-          </div>
+          </motion.div>
           
           <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-            {featuredCars.map((car) => (
-              <CarCard key={car.id} car={car} />
+            {featuredCars.map((car, index) => (
+              <motion.div
+                key={car.id}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-50px" }}
+                variants={fadeInUp}
+                transition={{ ...defaultTransition, delay: index * 0.05 }}
+              >
+                <CarCard car={car} />
+              </motion.div>
             ))}
           </div>
           
           <div className="mt-12 text-center">
-            <Button size="lg" variant="outline" asChild>
-              <Link href="/cars">Shiko Të Gjitha Veturat</Link>
+            <Button size="lg" variant="outline" className="!border-black !text-black hover:!bg-black hover:!text-white" asChild>
+              <Link href="/cars" prefetch={true}>Shiko Të Gjitha Veturat</Link>
             </Button>
           </div>
         </div>
@@ -189,30 +313,47 @@ export default function HomePage() {
       {/* Why Choose Us */}
       <section className="py-24 bg-white">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
+          <motion.div 
+            className="mx-auto max-w-2xl text-center"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeInUp}
+            transition={defaultTransition}
+          >
             <h2 className="text-3xl font-bold tracking-tight text-black sm:text-4xl">
               Pse të Zgjedhësh AutoSallon Tafa?
             </h2>
             <p className="mt-4 text-lg leading-8 text-gray-600">
               Jemi të angazhuar për të ofruar shërbimin më të mirë dhe veturat më të sigurta
             </p>
-          </div>
+          </motion.div>
           
           <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-2 xl:grid-cols-4">
-            {features.map((feature) => (
-              <Card key={feature.title} className="text-center">
-                <CardContent className="p-6">
-                  <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 mb-4">
-                    <feature.icon className="h-8 w-8 text-black" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-black mb-2">
-                    {feature.title}
-                  </h3>
-                  <p className="text-gray-600 text-sm">
-                    {feature.description}
-                  </p>
-                </CardContent>
-              </Card>
+            {features.map((feature, index) => (
+              <motion.div
+                key={feature.title}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-50px" }}
+                variants={fadeInUp}
+                transition={{ ...defaultTransition, delay: index * 0.05 }}
+                whileHover={{ y: -5 }}
+              >
+                <Card className="text-center">
+                  <CardContent className="p-6">
+                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 mb-4">
+                      <feature.icon className="h-8 w-8 text-black" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-black mb-2">
+                      {feature.title}
+                    </h3>
+                    <p className="text-gray-600 text-sm">
+                      {feature.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -221,18 +362,34 @@ export default function HomePage() {
       {/* Process Section */}
       <section className="py-24 bg-black text-white">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
+          <motion.div 
+            className="mx-auto max-w-2xl text-center"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeInUp}
+            transition={defaultTransition}
+          >
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
               Si Funksionon Procesi?
             </h2>
             <p className="mt-4 text-lg leading-8 text-gray-300">
               Tre hapa të thjeshtë për të blerë veturën tënde të re
             </p>
-          </div>
+          </motion.div>
           
           <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-            {process.map((step) => (
-              <div key={step.step} className="text-center">
+            {process.map((step, index) => (
+              <motion.div 
+                key={step.step} 
+                className="text-center"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-50px" }}
+                variants={fadeInUp}
+                transition={{ ...defaultTransition, delay: index * 0.1 }}
+                whileHover={{ scale: 1.05 }}
+              >
                 <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-black font-bold text-xl mb-6">
                   {step.step}
                 </div>
@@ -242,7 +399,7 @@ export default function HomePage() {
                 <p className="text-gray-300">
                   {step.description}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -251,32 +408,49 @@ export default function HomePage() {
       {/* Testimonials */}
       <section className="py-24 bg-gray-50">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
+          <motion.div 
+            className="mx-auto max-w-2xl text-center"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeInUp}
+            transition={defaultTransition}
+          >
             <h2 className="text-3xl font-bold tracking-tight text-black sm:text-4xl">
               Çka Thonë Klientët Tanë
             </h2>
             <p className="mt-4 text-lg leading-8 text-gray-600">
               Dëgjoni përvojat e klientëve që kanë zgjedhur AutoSallon Tafa
             </p>
-          </div>
+          </motion.div>
           
           <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-            {testimonials.map((testimonial) => (
-              <Card key={testimonial.name}>
-                <CardContent className="p-6">
-                  <div className="flex items-center mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="h-5 w-5 text-black fill-current" />
-                    ))}
-                  </div>
-                  <blockquote className="text-gray-600 mb-4">
-                    "{testimonial.text}"
-                  </blockquote>
-                  <cite className="text-black font-semibold">
-                    — {testimonial.name}
-                  </cite>
-                </CardContent>
-              </Card>
+            {testimonials.map((testimonial, index) => (
+              <motion.div
+                key={testimonial.name}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-50px" }}
+                variants={fadeInUp}
+                transition={{ ...defaultTransition, delay: index * 0.05 }}
+                whileHover={{ y: -5 }}
+              >
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center mb-4">
+                      {[...Array(testimonial.rating)].map((_, i) => (
+                        <Star key={i} className="h-5 w-5 text-black fill-current" />
+                      ))}
+                    </div>
+                    <blockquote className="text-gray-600 mb-4">
+                      "{testimonial.text}"
+                    </blockquote>
+                    <cite className="text-black font-semibold">
+                      — {testimonial.name}
+                    </cite>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -312,7 +486,7 @@ export default function HomePage() {
               className="border-white text-white hover:bg-white hover:text-black"
               asChild
             >
-              <Link href="/cars">Shiko Inventarin</Link>
+              <Link href="/cars" prefetch={true}>Shiko Inventarin</Link>
             </Button>
           </div>
         </div>

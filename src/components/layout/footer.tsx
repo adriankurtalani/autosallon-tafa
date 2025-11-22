@@ -62,27 +62,27 @@ export function Footer() {
               <h3 className="text-sm font-semibold leading-6 text-white">Navigimi</h3>
               <ul role="list" className="mt-6 space-y-4">
                 <li>
-                  <Link href="/" className="text-sm leading-6 text-gray-300 hover:text-white transition-colors">
+                  <Link href="/" prefetch={true} className="text-sm leading-6 text-gray-300 hover:text-white transition-colors">
                     Ballina
                   </Link>
                 </li>
                 <li>
-                  <Link href="/cars" className="text-sm leading-6 text-gray-300 hover:text-white transition-colors">
+                  <Link href="/cars" prefetch={true} className="text-sm leading-6 text-gray-300 hover:text-white transition-colors">
                     Veturat
                   </Link>
                 </li>
                 <li>
-                  <Link href="/about" className="text-sm leading-6 text-gray-300 hover:text-white transition-colors">
+                  <Link href="/about" prefetch={true} className="text-sm leading-6 text-gray-300 hover:text-white transition-colors">
                     Rreth Nesh
                   </Link>
                 </li>
                 <li>
-                  <Link href="/services" className="text-sm leading-6 text-gray-300 hover:text-white transition-colors">
+                  <Link href="/services" prefetch={true} className="text-sm leading-6 text-gray-300 hover:text-white transition-colors">
                     Shërbimet
                   </Link>
                 </li>
                 <li>
-                  <Link href="/contact" className="text-sm leading-6 text-gray-300 hover:text-white transition-colors">
+                  <Link href="/contact" prefetch={true} className="text-sm leading-6 text-gray-300 hover:text-white transition-colors">
                     Kontakti
                   </Link>
                 </li>

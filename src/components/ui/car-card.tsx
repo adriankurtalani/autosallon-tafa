@@ -3,11 +3,13 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { Car } from "@/types/car";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatPrice, formatMileage, cn } from "@/lib/utils";
+import { fadeInUp, defaultTransition } from "@/lib/motion-config";
 import { Fuel, Gauge, Calendar, Settings } from "lucide-react";
 
 interface CarCardProps {
@@ -17,18 +19,35 @@ interface CarCardProps {
 
 export function CarCard({ car, className }: CarCardProps) {
   return (
-    <Card className={cn(
-      "group overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-black/20 hover:-translate-y-1",
-      className
-    )}>
-      {/* Car Image */}
-      <div className="relative aspect-[4/3] overflow-hidden">
-        <Image
-          src={car.mainImage}
-          alt={`${car.brand} ${car.model}`}
-          fill
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
-        />
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-50px" }}
+      variants={fadeInUp}
+      transition={defaultTransition}
+      whileHover={{ y: -8 }}
+      className={className}
+    >
+      <Card className={cn(
+        "group overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-black/25",
+        className
+      )}>
+        {/* Car Image */}
+        <div className="relative aspect-[4/3] overflow-hidden">
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.3 }}
+            className="h-full w-full"
+          >
+            <Image
+              src={car.mainImage}
+              alt={`${car.brand} ${car.model}`}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              loading="lazy"
+            />
+          </motion.div>
         
         {/* Badges */}
         <div className="absolute top-4 left-4 flex flex-col gap-2">
@@ -90,14 +109,14 @@ export function CarCard({ car, className }: CarCardProps) {
         
         {/* Fuel Type Badge */}
         <div className="flex items-center gap-2 mb-4">
-          <Badge variant="outline" className="text-xs">
+          <Badge variant="outline" className="text-xs border-gray-300 !border-gray-300">
             {car.transmission}
           </Badge>
-          <Badge variant="outline" className="text-xs">
+          <Badge variant="outline" className="text-xs border-gray-300 !border-gray-300">
             {car.fuelType}
           </Badge>
           {car.color && (
-            <Badge variant="outline" className="text-xs">
+            <Badge variant="outline" className="text-xs border-gray-300 !border-gray-300">
               {car.color}
             </Badge>
           )}
@@ -105,12 +124,19 @@ export function CarCard({ car, className }: CarCardProps) {
       </CardContent>
       
       <CardFooter className="p-6 pt-0">
-        <Button asChild className="w-full group-hover:bg-black group-hover:text-white transition-colors">
-          <Link href={`/cars/${car.slug}`}>
-            Shiko Detajet
-          </Link>
-        </Button>
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="w-full"
+        >
+          <Button asChild className="w-full group-hover:bg-black group-hover:text-white transition-colors">
+            <Link href={`/cars/${car.slug}`}>
+              Shiko Detajet
+            </Link>
+          </Button>
+        </motion.div>
       </CardFooter>
     </Card>
+    </motion.div>
   );
 }

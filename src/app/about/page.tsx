@@ -165,6 +165,8 @@ export default function AboutPage() {
                   alt="AutoSallon Tafa showroom"
                   fill
                   className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  loading="lazy"
                 />
               </div>
               
@@ -175,6 +177,8 @@ export default function AboutPage() {
                     alt="Detaje shërbimi"
                     fill
                     className="object-cover"
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                    loading="lazy"
                   />
                 </div>
                 <div className="aspect-square relative overflow-hidden rounded-xl">
@@ -183,6 +187,8 @@ export default function AboutPage() {
                     alt="Klientë të kënaqur"
                     fill
                     className="object-cover"
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                    loading="lazy"
                   />
                 </div>
               </div>
@@ -245,6 +251,8 @@ export default function AboutPage() {
                       alt={member.name}
                       fill
                       className="object-cover rounded-full"
+                      sizes="128px"
+                      loading="lazy"
                     />
                   </div>
                   <h3 className="text-xl font-semibold text-black mb-1">
