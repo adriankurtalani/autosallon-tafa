@@ -1,4 +1,4 @@
-# AutoSallon Tafa - Modern Car Dealership Website
+# Auto Salloni Adrian - Modern Car Dealership Website
 
 A professional, modern car dealership website built with Next.js, featuring a sleek black & white design and comprehensive car inventory management.
 
@@ -29,8 +29,8 @@ A professional, modern car dealership website built with Next.js, featuring a sl
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/autosallon-tafa.git
-   cd autosallon-tafa
+   git clone https://github.com/yourusername/autosalloniadrian.git
+   cd autosalloniadrian
    ```
 
 2. **Install dependencies**
@@ -58,7 +58,7 @@ A professional, modern car dealership website built with Next.js, featuring a sl
 ## 📁 Project Structure
 
 ```
-autosallon-tafa/
+autosalloniadrian/
 ├── src/
 │   ├── app/                    # Next.js app directory
 │   │   ├── page.tsx           # Homepage
@@ -162,15 +162,15 @@ The admin panel supports:
 
 ## 🛡️ License
 
-This project is created for AutoSallon Tafa. All rights reserved.
+This project is created for Auto Salloni Adrian. All rights reserved.
 
 ## 📞 Support
 
 For support or questions about this website:
 - **Phone**: +355 69 123 4567
-- **Email**: info@autosallontafa.al
+- **Email**: info@autosalloniadrian.al
 - **WhatsApp**: [Contact us](https://wa.me/355691234567)
 
 ---
 
-**Built with ❤️ for AutoSallon Tafa**
+**Built with ❤️ for Auto Salloni Adrian**

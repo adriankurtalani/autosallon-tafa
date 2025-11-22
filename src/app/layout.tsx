@@ -12,19 +12,19 @@ const inter = Inter({
   variable: '--font-inter',
 })
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://autosallontafa.al';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://autosalloniadrian.al';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'AutoSallon Tafa - Vetura të Zgjedhura me Kujdes',
-    template: '%s | AutoSallon Tafa',
+    default: 'Auto Salloni Adrian - Vetura të Zgjedhura me Kujdes',
+    template: '%s | Auto Salloni Adrian',
   },
   description: 'AutoSallon profesionale me inventar të gjerë veturash. Shërbim i sigurt, garanci dhe mundësi financimi. Gjej veturën tënde ideale sot.',
   keywords: 'auto sallon, vetura, makinë, shitje veturash, Tiranë, Shqipëri, BMW, Audi, Mercedes',
-  authors: [{ name: 'AutoSallon Tafa' }],
-  creator: 'AutoSallon Tafa',
-  publisher: 'AutoSallon Tafa',
+  authors: [{ name: 'Auto Salloni Adrian' }],
+  creator: 'Auto Salloni Adrian',
+  publisher: 'Auto Salloni Adrian',
   formatDetection: {
     email: false,
     address: false,
@@ -34,21 +34,21 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'sq_AL',
     url: SITE_URL,
-    siteName: 'AutoSallon Tafa',
-    title: 'AutoSallon Tafa - Vetura të Zgjedhura me Kujdes',
+    siteName: 'Auto Salloni Adrian',
+    title: 'Auto Salloni Adrian - Vetura të Zgjedhura me Kujdes',
     description: 'AutoSallon profesionale me inventar të gjerë veturash. Shërbim i sigurt, garanci dhe mundësi financimi.',
     images: [
       {
         url: `${SITE_URL}/og-image.jpg`,
         width: 1200,
         height: 630,
-        alt: 'AutoSallon Tafa',
+        alt: 'Auto Salloni Adrian',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'AutoSallon Tafa - Vetura të Zgjedhura me Kujdes',
+    title: 'Auto Salloni Adrian - Vetura të Zgjedhura me Kujdes',
     description: 'AutoSallon profesionale me inventar të gjerë veturash. Shërbim i sigurt, garanci dhe mundësi financimi.',
     images: [`${SITE_URL}/og-image.jpg`],
   },

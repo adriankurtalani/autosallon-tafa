@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 import { getAllCars } from '@/lib/supabase/cars';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://autosallontafa.al';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://autosalloniadrian.al';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Get all cars - handle gracefully if Supabase is not configured

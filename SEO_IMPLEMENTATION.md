@@ -66,7 +66,7 @@ git# SEO Implementation Summary
 ### Environment Variables
 Add to `.env.local`:
 ```env
-NEXT_PUBLIC_SITE_URL=https://autosallontafa.al
+NEXT_PUBLIC_SITE_URL=https://autosalloniadrian.al
 ```
 
 ### Google Search Console (Optional)
@@ -80,7 +80,7 @@ verification: {
 ## 📊 SEO Features Breakdown
 
 ### Car Detail Pages
-- **Title**: `{Brand} {Model} {Year} - {Price} | AutoSallon Tafa`
+- **Title**: `{Brand} {Model} {Year} - {Price} | Auto Salloni Adrian`
 - **Description**: Includes price, mileage, transmission, fuel type, power
 - **Open Graph**: Car image, title, description
 - **Structured Data**: Full Vehicle schema with offers, specifications

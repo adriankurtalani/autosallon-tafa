@@ -10,7 +10,7 @@ interface StructuredDataProps {
 }
 
 export function StructuredData({ car, breadcrumbs, includeOrganization = false }: StructuredDataProps) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autosallontafa.al';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autosalloniadrian.al';
   
   return (
     <>

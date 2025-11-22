@@ -65,7 +65,7 @@ export default function AboutPage() {
 
   const team = [
     {
-      name: "Tafa Kollari",
+      name: "Adrian Kollari",
       role: "Pronar & Menaxher",
       description: "Më shumë se 15 vjet përvoje në tregun e veturave. Ekspert në vlerësimin dhe zgjedhjen e veturave të cilësisë së lartë.",
       image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop"
@@ -86,7 +86,7 @@ export default function AboutPage() {
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center text-white">
             <h1 className="text-4xl font-bold tracking-tight sm:text-6xl mb-6">
-              Rreth AutoSallon Tafa
+              Rreth Auto Salloni Adrian
             </h1>
             <p className="text-xl leading-8 text-gray-200">
               Më shumë se një dekadë përvoje në shitjen e veturave të cilësisë së lartë. 
@@ -121,7 +121,7 @@ export default function AboutPage() {
               <h2 className="text-3xl font-bold text-black mb-6">Historia Jonë</h2>
               <div className="space-y-4 text-gray-700 leading-relaxed">
                 <p>
-                  AutoSallon Tafa u themelua në vitin 2013 me një mision të thjeshtë: të ofrojmë 
+                  Auto Salloni Adrian u themelua në vitin 2013 me një mision të thjeshtë: të ofrojmë 
                   veturat më të mira me shërbimin më profesional në Tiranë. Që atëherë, jemi 
                   rritur duke mbajtur gjithmonë cilësinë dhe besimin e klientëve në qendër të 
                   çdo gjëje që bëjmë.
@@ -141,7 +141,7 @@ export default function AboutPage() {
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
                 <Button size="lg" asChild>
                   <a 
-                    href={formatWhatsAppLink("+355691234567", "Përshëndetje, dëshiroj të mësoj më shumë rreth AutoSallon Tafa")}
+                    href={formatWhatsAppLink("+355691234567", "Përshëndetje, dëshiroj të mësoj më shumë rreth Auto Salloni Adrian")}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -162,7 +162,7 @@ export default function AboutPage() {
               <div className="aspect-[4/3] relative overflow-hidden rounded-2xl">
                 <Image
                   src="https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?w=600&h=450&fit=crop"
-                  alt="AutoSallon Tafa showroom"
+                  alt="Auto Salloni Adrian showroom"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -284,7 +284,7 @@ export default function AboutPage() {
                   <div>
                     <h3 className="font-semibold text-black mb-1">Adresa</h3>
                     <p className="text-gray-600">
-                      Auto Tafa<br />
+                      Auto Salloni Adrian<br />
                       Shqipëri<br />
                       <span className="text-sm text-gray-500">Koordinatat: 42.4347833, 21.4552112</span>
                     </p>
@@ -309,7 +309,7 @@ export default function AboutPage() {
                     <h3 className="font-semibold text-black mb-1">Kontakti</h3>
                     <div className="text-gray-600 space-y-1">
                       <p>Tel: +355 69 123 4567</p>
-                      <p>Email: info@autosallontafa.al</p>
+                      <p>Email: info@autosalloniadrian.al</p>
                     </div>
                   </div>
                 </div>
@@ -339,7 +339,7 @@ export default function AboutPage() {
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Auto Tafa Location"
+                title="Auto Salloni Adrian Location"
                 className="rounded-2xl"
               />
             </div>
@@ -364,7 +364,7 @@ export default function AboutPage() {
               asChild
             >
               <a 
-                href={formatWhatsAppLink("+355691234567", "Përshëndetje, dëshiroj të vizitoj AutoSallon Tafa")}
+                href={formatWhatsAppLink("+355691234567", "Përshëndetje, dëshiroj të vizitoj Auto Salloni Adrian")}
                 target="_blank"
                 rel="noopener noreferrer"
               >

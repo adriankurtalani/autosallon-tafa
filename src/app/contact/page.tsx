@@ -171,15 +171,15 @@ Mesazhi: ${formData.message}
       title: "WhatsApp",
       value: "+355 69 123 4567",
       description: "Mesazh i shpejtë 24/7",
-      action: () => window.open(formatWhatsAppLink("+355691234567", "Përshëndetje, dëshiroj të kontaktoj AutoSallon Tafa"), '_blank'),
+      action: () => window.open(formatWhatsAppLink("+355691234567", "Përshëndetje, dëshiroj të kontaktoj Auto Salloni Adrian"), '_blank'),
       color: "bg-gray-50 border-gray-200"
     },
     {
       icon: Mail,
       title: "Email",
-      value: "info@autosallontafa.al",
+      value: "info@autosalloniadrian.al",
       description: "Përgjigjemi brenda 24 orësh",
-      action: () => window.open("mailto:info@autosallontafa.al", '_self'),
+      action: () => window.open("mailto:info@autosalloniadrian.al", '_self'),
       color: "bg-gray-50 border-gray-200"
     },
     {
@@ -545,7 +545,7 @@ Mesazhi: ${formData.message}
                       <div>
                         <p className="font-semibold text-black">Adresa e Plotë</p>
                         <p className="text-gray-600">
-                          Auto Tafa<br />
+                          Auto Salloni Adrian<br />
                           Koordinatat: 42.4347833, 21.4552112<br />
                           Shqipëri
                         </p>
@@ -585,7 +585,7 @@ Mesazhi: ${formData.message}
                       allowFullScreen
                       loading="lazy"
                       referrerPolicy="no-referrer-when-downgrade"
-                      title="Auto Tafa Location"
+                      title="Auto Salloni Adrian Location"
                       className="rounded-lg"
                     />
                   </div>

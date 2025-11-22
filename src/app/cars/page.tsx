@@ -30,9 +30,9 @@ export default function CarsPage() {
   const [selectedBrands, setSelectedBrands] = React.useState<string[]>([]);
   const [selectedTransmissions, setSelectedTransmissions] = React.useState<string[]>([]);
   const [selectedFuelTypes, setSelectedFuelTypes] = React.useState<string[]>([]);
-  const [priceRange, setPriceRange] = React.useState<[number, number]>([0, 100000]);
-  const [yearRange, setYearRange] = React.useState<[number, number]>([2010, 2025]);
-  const [mileageRange, setMileageRange] = React.useState<[number, number]>([0, 100000]);
+  const [priceRange, setPriceRange] = React.useState<[number | "", number | ""]>(["", ""]);
+  const [yearRange, setYearRange] = React.useState<[number | "", number | ""]>(["", ""]);
+  const [mileageRange, setMileageRange] = React.useState<[number | "", number | ""]>(["", ""]);
   const [searchQuery, setSearchQuery] = React.useState("");
   
   const [brands, setBrands] = React.useState<string[]>([]);
@@ -65,15 +65,7 @@ export default function CarsPage() {
     loadData();
   }, []);
   
-  // Initialize ranges with actual data min/max (only once)
-  React.useEffect(() => {
-    if (cars.length > 0 && priceRange[0] === 0 && priceRange[1] === 100000) {
-      setPriceRange([priceMin, priceMax]);
-    }
-    if (cars.length > 0 && mileageRange[0] === 0 && mileageRange[1] === 100000) {
-      setMileageRange([mileageMin, mileageMax]);
-    }
-  }, [cars.length, priceMin, priceMax, mileageMin, mileageMax]);
+  // No auto-initialization - filters start empty
   
   // Calculate active filter count
   const activeFilterCount = React.useMemo(() => {
@@ -81,12 +73,12 @@ export default function CarsPage() {
     if (selectedBrands.length > 0) count += selectedBrands.length;
     if (selectedTransmissions.length > 0) count += selectedTransmissions.length;
     if (selectedFuelTypes.length > 0) count += selectedFuelTypes.length;
-    if (priceRange[0] !== priceMin || priceRange[1] !== priceMax) count += 1;
-    if (yearRange[0] !== 2010 || yearRange[1] !== 2025) count += 1;
-    if (mileageRange[0] !== mileageMin || mileageRange[1] !== mileageMax) count += 1;
+    if (priceRange[0] !== "" || priceRange[1] !== "") count += 1;
+    if (yearRange[0] !== "" || yearRange[1] !== "") count += 1;
+    if (mileageRange[0] !== "" || mileageRange[1] !== "") count += 1;
     if (searchQuery) count += 1;
     return count;
-  }, [selectedBrands, selectedTransmissions, selectedFuelTypes, priceRange, yearRange, mileageRange, searchQuery, priceMin, priceMax, mileageMin, mileageMax]);
+  }, [selectedBrands, selectedTransmissions, selectedFuelTypes, priceRange, yearRange, mileageRange, searchQuery]);
   
   // Initialize filters from URL parameters
   React.useEffect(() => {
@@ -104,11 +96,11 @@ export default function CarsPage() {
     
     if (yearRangeParam) {
       if (yearRangeParam === "2020-2025") {
-        setYearRange([2020, 2025]);
+        setYearRange([2020, 2025] as [number, number]);
       } else if (yearRangeParam === "2015-2019") {
-        setYearRange([2015, 2019]);
+        setYearRange([2015, 2019] as [number, number]);
       } else if (yearRangeParam === "2010-2014") {
-        setYearRange([2010, 2014]);
+        setYearRange([2010, 2014] as [number, number]);
       }
     }
   }, [searchParams]);
@@ -141,14 +133,26 @@ export default function CarsPage() {
       result = result.filter(car => selectedFuelTypes.includes(car.fuelType));
     }
     
-    // Apply price range filter
-    result = result.filter(car => car.price >= priceRange[0] && car.price <= priceRange[1]);
+    // Apply price range filter (only if values are set)
+    if (priceRange[0] !== "" || priceRange[1] !== "") {
+      const minPrice = priceRange[0] === "" ? priceMin : Number(priceRange[0]);
+      const maxPrice = priceRange[1] === "" ? priceMax : Number(priceRange[1]);
+      result = result.filter(car => car.price >= minPrice && car.price <= maxPrice);
+    }
     
-    // Apply year range filter
-    result = result.filter(car => car.year >= yearRange[0] && car.year <= yearRange[1]);
+    // Apply year range filter (only if values are set)
+    if (yearRange[0] !== "" || yearRange[1] !== "") {
+      const minYear = yearRange[0] === "" ? 2010 : Number(yearRange[0]);
+      const maxYear = yearRange[1] === "" ? 2025 : Number(yearRange[1]);
+      result = result.filter(car => car.year >= minYear && car.year <= maxYear);
+    }
     
-    // Apply mileage range filter
-    result = result.filter(car => car.mileage >= mileageRange[0] && car.mileage <= mileageRange[1]);
+    // Apply mileage range filter (only if values are set)
+    if (mileageRange[0] !== "" || mileageRange[1] !== "") {
+      const minMileage = mileageRange[0] === "" ? mileageMin : Number(mileageRange[0]);
+      const maxMileage = mileageRange[1] === "" ? mileageMax : Number(mileageRange[1]);
+      result = result.filter(car => car.mileage >= minMileage && car.mileage <= maxMileage);
+    }
     
     // Apply sorting
     result.sort((a, b) => {
@@ -177,9 +181,9 @@ export default function CarsPage() {
     setSelectedBrands([]);
     setSelectedTransmissions([]);
     setSelectedFuelTypes([]);
-    setPriceRange([priceMin, priceMax]);
-    setYearRange([2010, 2025]);
-    setMileageRange([mileageMin, mileageMax]);
+    setPriceRange(["", ""]);
+    setYearRange(["", ""]);
+    setMileageRange(["", ""]);
     setSearchQuery("");
   };
   
@@ -326,7 +330,7 @@ export default function CarsPage() {
                           min={priceMin}
                           max={priceMax}
                           value={priceRange[0]}
-                          onChange={(e) => setPriceRange([parseInt(e.target.value) || priceMin, priceRange[1]])}
+                          onChange={(e) => setPriceRange([e.target.value === "" ? "" : parseInt(e.target.value) || "", priceRange[1]])}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-black focus:border-black focus:outline-none"
                           aria-label="Çmimi minimal"
                         />
@@ -340,7 +344,7 @@ export default function CarsPage() {
                           min={priceMin}
                           max={priceMax}
                           value={priceRange[1]}
-                          onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value) || priceMax])}
+                          onChange={(e) => setPriceRange([priceRange[0], e.target.value === "" ? "" : parseInt(e.target.value) || ""])}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-black focus:border-black focus:outline-none"
                           aria-label="Çmimi maksimal"
                         />
@@ -358,10 +362,11 @@ export default function CarsPage() {
                       <select 
                         id="year-min"
                         value={yearRange[0]}
-                        onChange={(e) => setYearRange([parseInt(e.target.value), yearRange[1]])}
+                        onChange={(e) => setYearRange([e.target.value === "" ? "" : parseInt(e.target.value), yearRange[1]])}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-black focus:border-black focus:outline-none"
                         aria-label="Viti minimal"
                       >
+                        <option value="">Min</option>
                         {Array.from({ length: 16 }, (_, i) => 2010 + i).map(year => (
                           <option key={year} value={year}>{year}</option>
                         ))}
@@ -372,10 +377,11 @@ export default function CarsPage() {
                       <select 
                         id="year-max"
                         value={yearRange[1]}
-                        onChange={(e) => setYearRange([yearRange[0], parseInt(e.target.value)])}
+                        onChange={(e) => setYearRange([yearRange[0], e.target.value === "" ? "" : parseInt(e.target.value)])}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-black focus:border-black focus:outline-none"
                         aria-label="Viti maksimal"
                       >
+                        <option value="">Max</option>
                         {Array.from({ length: 16 }, (_, i) => 2010 + i).map(year => (
                           <option key={year} value={year}>{year}</option>
                         ))}
@@ -398,7 +404,7 @@ export default function CarsPage() {
                           min={mileageMin}
                           max={mileageMax}
                           value={mileageRange[0]}
-                          onChange={(e) => setMileageRange([parseInt(e.target.value) || mileageMin, mileageRange[1]])}
+                          onChange={(e) => setMileageRange([e.target.value === "" ? "" : parseInt(e.target.value) || "", mileageRange[1]])}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-black focus:border-black focus:outline-none"
                           aria-label="Kilometrazha minimale"
                         />
@@ -412,7 +418,7 @@ export default function CarsPage() {
                           min={mileageMin}
                           max={mileageMax}
                           value={mileageRange[1]}
-                          onChange={(e) => setMileageRange([mileageRange[0], parseInt(e.target.value) || mileageMax])}
+                          onChange={(e) => setMileageRange([mileageRange[0], e.target.value === "" ? "" : parseInt(e.target.value) || ""])}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-black focus:border-black focus:outline-none"
                           aria-label="Kilometrazha maksimale"
                         />

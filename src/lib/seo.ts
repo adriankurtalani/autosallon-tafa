@@ -3,8 +3,8 @@
 import { Metadata } from 'next';
 import { Car } from '@/types/car';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://autosallontafa.al';
-const SITE_NAME = 'AutoSallon Tafa';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://autosalloniadrian.al';
+const SITE_NAME = 'Auto Salloni Adrian';
 
 // Generate metadata for car detail page
 export function generateCarMetadata(car: Car): Metadata {

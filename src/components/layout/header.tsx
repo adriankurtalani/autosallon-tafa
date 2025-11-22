@@ -122,7 +122,7 @@ export function Header() {
             aria-label="Menuja mobile"
           >
             <div className="flex items-center justify-between">
-              <Link href="/" className="-m-1.5 p-1.5" aria-label="AutoSallon Tafa - Ballina">
+              <Link href="/" className="-m-1.5 p-1.5" aria-label="Auto Salloni Adrian - Ballina">
                 <span className="text-xl font-bold text-gradient">AutoSallon</span>
               </Link>
               <Button

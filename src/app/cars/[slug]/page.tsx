@@ -97,8 +97,8 @@ export default function CarDetailPage() {
     { name: `${car.brand} ${car.model}`, url: `/cars/${car.slug}` },
   ];
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autosallontafa.al';
-  const pageTitle = `${car.brand} ${car.model} ${car.year} - ${formatPrice(car.price)} | AutoSallon Tafa`;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autosalloniadrian.al';
+  const pageTitle = `${car.brand} ${car.model} ${car.year} - ${formatPrice(car.price)} | Auto Salloni Adrian`;
   const pageDescription = `${car.brand} ${car.model} ${car.year} për ${formatPrice(car.price)}. ${car.mileage.toLocaleString()} km, ${car.transmission}, ${car.fuelType}${car.powerHp ? `, ${car.powerHp} HP` : ''}. ${car.description || 'Veturë e kontrolluar teknikisht me garanci.'}`;
 
   return (
@@ -231,7 +231,7 @@ export default function CarDetailPage() {
                 </Button>
                 
                 <Button variant="outline" size="lg" className="border-black text-black hover:bg-black hover:text-white" asChild>
-                  <a href="mailto:info@autosallontafa.al?subject=Interesim për veturën&body=Përshëndetje, jam i interesuar për veturën tuaj.">
+                  <a href="mailto:info@autosalloniadrian.al?subject=Interesim për veturën&body=Përshëndetje, jam i interesuar për veturën tuaj.">
                     <Mail className="h-4 w-4 mr-2" />
                     Email
                   </a>

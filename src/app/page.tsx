@@ -188,7 +188,7 @@ export default function HomePage() {
               variants={fadeInUp}
               transition={{ ...defaultTransition, delay: 0.2 }}
             >
-              AutoSallon Tafa - Vetura të zgjedhura me kujdes për çdo nevojë. 
+              Auto Salloni Adrian - Vetura të zgjedhura me kujdes për çdo nevojë. 
               Shërbim profesional, çmime të drejta dhe garanci e sigurt.
             </motion.p>
             <motion.div 
@@ -322,7 +322,7 @@ export default function HomePage() {
             transition={defaultTransition}
           >
             <h2 className="text-3xl font-bold tracking-tight text-black sm:text-4xl">
-              Pse të Zgjedhësh AutoSallon Tafa?
+              Pse të Zgjedhësh Auto Salloni Adrian?
             </h2>
             <p className="mt-4 text-lg leading-8 text-gray-600">
               Jemi të angazhuar për të ofruar shërbimin më të mirë dhe veturat më të sigurta
@@ -420,7 +420,7 @@ export default function HomePage() {
               Çka Thonë Klientët Tanë
             </h2>
             <p className="mt-4 text-lg leading-8 text-gray-600">
-              Dëgjoni përvojat e klientëve që kanë zgjedhur AutoSallon Tafa
+              Dëgjoni përvojat e klientëve që kanë zgjedhur Auto Salloni Adrian
             </p>
           </motion.div>
           

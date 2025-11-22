@@ -267,7 +267,7 @@ export default function ServicesPage() {
           <div className="mx-auto max-w-2xl text-center mb-16">
             <h2 className="text-3xl font-bold text-black mb-4">Pse Na Zgjidhni</h2>
             <p className="text-lg text-gray-600">
-              Përfitimet që merrni duke punuar me AutoSallon Tafa
+              Përfitimet që merrni duke punuar me Auto Salloni Adrian
             </p>
           </div>
           
@@ -375,7 +375,7 @@ export default function ServicesPage() {
           
           <div className="mt-8 text-gray-200">
             <p className="text-sm">
-              📍 Auto Tafa, Shqipëri • 📞 +355 69 123 4567 • ✉️ info@autosallontafa.al
+              📍 Auto Salloni Adrian, Shqipëri • 📞 +355 69 123 4567 • ✉️ info@autosalloniadrian.al
             </p>
           </div>
         </div>

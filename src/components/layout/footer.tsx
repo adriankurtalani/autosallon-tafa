@@ -12,7 +12,7 @@ export function Footer() {
           <div className="space-y-8">
             <div>
               <h3 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                AutoSallon Tafa
+                Auto Salloni Adrian
               </h3>
               <p className="mt-4 text-gray-300 max-w-md">
                 Vetura të zgjedhura me kujdes për klientët tanë. Me vite përvoje në shitjen e 
@@ -35,10 +35,10 @@ export function Footer() {
               <div className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-accent" />
                 <a 
-                  href="mailto:info@autosallontafa.al" 
+                  href="mailto:info@autosalloniadrian.al" 
                   className="text-gray-300 hover:text-white transition-colors"
                 >
-                  info@autosallontafa.al
+                  info@autosalloniadrian.al
                 </a>
               </div>
               
@@ -50,7 +50,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   className="text-gray-300 hover:text-white transition-colors"
                 >
-                  Auto Tafa, Shqipëri
+                  Auto Salloni Adrian, Shqipëri
                 </a>
               </div>
             </div>
@@ -128,7 +128,7 @@ export function Footer() {
           </div>
           
           <p className="text-xs leading-5 text-gray-400">
-            &copy; 2025 AutoSallon Tafa. Të gjitha të drejtat e rezervuara.
+            &copy; 2025 Auto Salloni Adrian. Të gjitha të drejtat e rezervuara.
           </p>
         </div>
         
