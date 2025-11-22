@@ -3,6 +3,15 @@ import { Car } from '@/types/car';
 
 // Convert database row to Car type
 function dbRowToCar(row: any): Car {
+  // Ensure options is always an array
+  let options: string[] = [];
+  if (Array.isArray(row.options)) {
+    options = row.options;
+  } else if (row.options && typeof row.options === 'string') {
+    // Handle case where options might be stored as a single string
+    options = [row.options];
+  }
+  
   return {
     id: row.id,
     slug: row.slug,
@@ -19,15 +28,15 @@ function dbRowToCar(row: any): Car {
     isNew: row.is_new ?? false,
     featured: row.featured ?? false,
     mainImage: row.main_image,
-    gallery: row.gallery || [],
-    options: row.options || [],
+    gallery: Array.isArray(row.gallery) ? row.gallery : [],
+    options: options,
     description: row.description,
   };
 }
 
 // Convert Car type to database insert format
 function carToDbRow(car: Partial<Car>): any {
-  return {
+  const dbRow: any = {
     slug: car.slug,
     brand: car.brand,
     model: car.model,
@@ -43,9 +52,18 @@ function carToDbRow(car: Partial<Car>): any {
     featured: car.featured,
     main_image: car.mainImage,
     gallery: car.gallery || [],
-    options: car.options || [],
+    options: Array.isArray(car.options) ? car.options : (car.options ? [car.options] : []),
     description: car.description,
   };
+  
+  // Remove undefined values to avoid overwriting with null
+  Object.keys(dbRow).forEach(key => {
+    if (dbRow[key] === undefined) {
+      delete dbRow[key];
+    }
+  });
+  
+  return dbRow;
 }
 
 // Fetch all cars

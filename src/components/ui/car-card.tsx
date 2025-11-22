@@ -17,6 +17,19 @@ interface CarCardProps {
   className?: string;
 }
 
+const formatBadgeLabel = (value: string) => {
+  if (!value) return "";
+  return value
+    .trim()
+    .split(/\s+/)
+    .map(
+      (word) =>
+        word.charAt(0).toLocaleUpperCase("sq-AL") +
+        word.slice(1).toLocaleLowerCase("sq-AL")
+    )
+    .join(" ");
+};
+
 export function CarCard({ car, className }: CarCardProps) {
   return (
     <motion.div
@@ -107,19 +120,19 @@ export function CarCard({ car, className }: CarCardProps) {
           )}
         </div>
         
-        {/* Fuel Type Badge */}
-        <div className="flex items-center gap-2 mb-4">
-          <Badge variant="outline" className="text-xs border-gray-300 !border-gray-300">
-            {car.transmission}
-          </Badge>
-          <Badge variant="outline" className="text-xs border-gray-300 !border-gray-300">
-            {car.fuelType}
-          </Badge>
-          {car.color && (
-            <Badge variant="outline" className="text-xs border-gray-300 !border-gray-300">
-              {car.color}
-            </Badge>
-          )}
+        {/* Detail Badges */}
+        <div className="flex flex-wrap items-center gap-2 mb-4">
+          {[car.transmission, car.fuelType, car.color]
+            .filter(Boolean)
+            .map((item, index) => (
+              <Badge
+                key={`${item}-${index}`}
+                variant="outline"
+                className="text-[11px] font-semibold tracking-wide border-gray-300 !border-gray-300 px-3 py-1 rounded-full"
+              >
+                {formatBadgeLabel(item as string)}
+              </Badge>
+            ))}
         </div>
       </CardContent>
       

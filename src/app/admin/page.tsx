@@ -307,6 +307,27 @@ export default function AdminPage() {
       // Upload images if there are new files
       if (imageFiles.length > 0) {
         setUploadingImages(true);
+        addToast("Optimizing images...", "info");
+        
+        // Optimize images before upload (dynamic import for client-side only)
+        let optimizedFiles: File[] = [];
+        try {
+          const { optimizeImages } = await import("@/lib/image-optimization");
+          const optimized = await optimizeImages(imageFiles, false); // Don't generate thumbnails for now
+          optimizedFiles = optimized.map(img => img.file);
+          
+          const totalOriginal = optimized.reduce((sum, img) => sum + img.originalSize, 0);
+          const totalOptimized = optimized.reduce((sum, img) => sum + img.optimizedSize, 0);
+          const savings = ((totalOriginal - totalOptimized) / totalOriginal) * 100;
+          
+          if (savings > 0) {
+            addToast(`Images optimized: ${savings.toFixed(0)}% size reduction`, "success");
+          }
+        } catch (error: any) {
+          console.error("Image optimization error:", error);
+          addToast("Warning: Could not optimize images, using originals", "error");
+          optimizedFiles = imageFiles; // Use original files if optimization fails
+        }
         
         if (isCreating && editingCar === null) {
           // For new cars, create car first to get ID, then upload images
@@ -324,9 +345,10 @@ export default function AdminPage() {
             return;
           }
           
-          // Upload images with the car ID
+          // Upload optimized images with the car ID
           try {
-            const uploadedUrls = await uploadCarImages(imageFiles, newCar.id);
+            addToast("Uploading optimized images...", "info");
+            const uploadedUrls = await uploadCarImages(optimizedFiles, newCar.id);
             if (uploadedUrls.length === 0) {
               addToast("Failed to upload images. Please check browser console for details.", "error");
               setSaving(false);
@@ -342,8 +364,9 @@ export default function AdminPage() {
             return;
           }
           
-          // Update car with image URLs
+          // Update car with image URLs and preserve all form data
           const updatedCar = await updateCar(newCar.id, {
+            ...formData,
             mainImage: imageUrls[0] || "",
             gallery: imageUrls.slice(1),
           });
@@ -356,9 +379,10 @@ export default function AdminPage() {
             addToast("Failed to update car with images", "error");
           }
         } else if (editingCar) {
-          // For existing cars, upload images with existing car ID
+          // For existing cars, upload optimized images with existing car ID
           try {
-            const uploadedUrls = await uploadCarImages(imageFiles, editingCar.id);
+            addToast("Uploading optimized images...", "info");
+            const uploadedUrls = await uploadCarImages(optimizedFiles, editingCar.id);
             imageUrls = uploadedUrls;
           } catch (error: any) {
             console.error("Image upload error:", error);
@@ -475,10 +499,15 @@ export default function AdminPage() {
   };
 
   const handleArrayChange = (field: 'gallery' | 'options', value: string) => {
-    const currentArray = formData[field] || [];
+    // Split by comma, trim each item, and filter out empty strings
+    const arrayValue = value
+      .split(',')
+      .map(item => item.trim())
+      .filter(Boolean);
+    
     setFormData(prev => ({
       ...prev,
-      [field]: value.split(',').map(item => item.trim()).filter(Boolean)
+      [field]: arrayValue
     }));
   };
 
